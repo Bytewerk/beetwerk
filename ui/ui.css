@@ -1,0 +1,86 @@
+body
+{
+	width: 100%;
+	height: 100%;
+	background-color: white;
+	color: white;
+	font-family: Monospace, Mono;
+	font-size: 9pt;
+}
+
+#box
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	margin: 20px;
+	padding: 20px;
+	border: 5px solid rgb(85,204,204);
+	background-color: black;
+	line-height: 3px;
+}
+
+#file
+{
+	display:none;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+}
+
+#terminal
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	height: calc(100% - 85px);
+	display: none;
+	padding: 15px;
+	overflow-y: auto;
+	overflow-x: none;
+}
+
+#dropzone
+{
+	height: 100%;
+	width: 100%;
+	font-size: 20pt;
+}
+
+#commandline
+{
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	height: 50px;
+	bottom: 0px;
+	padding-left: 15px;
+	font-size: 15pt;
+	background-color: black;
+	color: white;
+	border: none;
+}
+
+
+.fade2gray
+{
+  color: gray;
+  animation-duration: 2s;
+  animation-name: fade2gray;
+}
+
+@keyframes fade2gray {
+  from {
+	color: white;
+  }
+
+  to {
+    color: gray;
+  }
+}
