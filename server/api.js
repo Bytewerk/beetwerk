@@ -22,8 +22,11 @@ function sid_folder(config,req,res,args)
 	dir = path.join(dir+"/"+(args.sid*1));
 	mkdir(dir);
 	
-	// TODO: delete folder, if it still exists after 5 hours or so
-	// setTimeout()...
+	// Delete folder, if it still exists after 2 hours
+	setTimeout(function()
+	{
+		cp.exec("rm -r '"+dir+"'");
+	},2 * 3600 * 1000);
 	
 	return dir;
 }
