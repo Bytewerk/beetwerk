@@ -56,7 +56,7 @@ exports.import = function(config, req, res, args)
 	var dir = sid_folder(config,req,res,args);
 	if(!dir) return;
 	
-	res.end(JSON.stringify(pipe.start(dir, "beet", ["import",dir])));
+	res.end(JSON.stringify(pipe.start(dir, config.binary, ["import",dir])));
 }
 
 exports.poll = function(config, req, res, args)
