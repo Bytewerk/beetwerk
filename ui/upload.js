@@ -128,7 +128,8 @@ function upload_start()
 	
 	var c = files.length;
 	line("(Step 1/2) Uploading "+c+" file" + (c==1?"":"s")
-		+ " ("+Math.floor(total_size/1024/1024*10)/10+" MiB)...", "green");
+		+ " ("+Math.floor(total_size/1024/1024*10)/10+" MiB)...",
+		"rgb(000,255,000)");
 	
 	$("file").style.display="none";
 	upload_all(function()
@@ -136,7 +137,7 @@ function upload_start()
 		if(global_upload_done) return;
 		global_upload_done = true;
 		line("(Step 2/2) Analyzing and importing music (this may take a few minutes, please be patient)...",
-			"green");
+		"rgb(000,255,000)");
 		$("commandline").focus();
 		upload_import();
 	});

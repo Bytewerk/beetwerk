@@ -36,8 +36,8 @@ function colorize(text)
 		"[33;01m"		: "yellow",
 		"[37m"			: "gray",
 		"[36;01m"		: "cyan",
-		"[34;01m"		: "blue",
-		"[32;01m"		: "green"
+		"[34;01m"		: "rgb(010,000,255)", // blue
+		"[32;01m"		: "rgb(000,255,000)", // green
 	};
 	
 	for(var code in codes)
@@ -92,7 +92,6 @@ function terminal_poll()
 			
 			global_poll_version = answer.version;
 			if(!answer.is_running) global_no_polling = true;
-			console.log("answer: "+JSON.stringify(answer));
 		}
 		if(!global_no_polling)
 			setTimeout(terminal_poll, answer ? 0 : 500);
