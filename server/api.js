@@ -4,6 +4,7 @@ var pipe = require('./pipe');
 var formidable = require('formidable'); // npm install formidable@latest
 var path = require("path");
 var fs = require("fs");
+var cp = require('child_process');
 
 // simple wrapper, that ignores existing folders
 function mkdir(a){try{fs.mkdirSync(a,function(e){});}catch(e){}}
