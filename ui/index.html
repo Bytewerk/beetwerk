@@ -10,16 +10,19 @@
 	</head>
 	<body onload="init()">
 		<div id="box">
-			<noscript>This page is no fun without Java Script.</noscript>
+			<noscript>This page is no fun without Javascript.</noscript>
 			<div id="terminal">
-					<h1 id="dropsome">
-							Drop some music here!
-							<font style="font-size:9pt">
-								(or click to use the upload dialog; full albums preferred)
-							</font>
-					</h1>
+					<div id="dropsome">
+							<h1>Drop some music here!</h1>
+							(or click to use the upload dialog; full albums preferred)
+					</div>
 			</div>
 			<input id="file" onchange="upload_start()" type="file" multiple>
+			<div id="top_right_links">
+				<a target="_blank" href="https://beets.readthedocs.org/en/latest/guides/tagger.html#similarity">GUIDE</a>
+				<a target="_blank" href="https://github.com/Bytewerk/beetwerk">GITHUB</a>
+				<a target="_blank" href="http://bytewerk.org">BYTEWERK</a>
+			</div>
 			<form onsubmit="terminal_send();return false">
 				<input id="commandline" placeholder="click here to type">
 			</form>

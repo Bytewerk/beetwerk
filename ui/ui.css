@@ -7,11 +7,11 @@ body
 	font-family: Monospace, Mono;
 	font-size: 9pt;
 }
-
 a
 {
 	color: white;
 }
+
 
 #box
 {
@@ -27,6 +27,7 @@ a
 	line-height: 3px;
 }
 
+
 #file
 {
 	display:none;
@@ -37,6 +38,7 @@ a
 	height: 100%;
 	opacity: 0;
 }
+
 
 #terminal
 {
@@ -51,12 +53,25 @@ a
 	overflow-x: none;
 }
 
-#dropzone
+
+#top_right_links
 {
-	height: 100%;
-	width: 100%;
-	font-size: 20pt;
+	position: absolute;
+	top: 0px;
+	right: 10px;
 }
+#top_right_links a
+{
+	display: block;
+	background-color: rgb(85,204,204);
+	float: left;
+	padding: 20px;
+	font-size: 12pt;
+	font-weight: bold;
+	margin: 0px 10px;
+	text-decoration: none;
+}
+
 
 #commandline
 {
@@ -73,13 +88,16 @@ a
 }
 
 
+/*
+	Simple fading animation
+*/
+
 .fade2gray
 {
   color: gray;
   animation-duration: 2s;
   animation-name: fade2gray;
 }
-
 @keyframes fade2gray {
   from {
 	color: white;
