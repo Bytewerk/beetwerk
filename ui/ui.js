@@ -36,7 +36,7 @@ function colorize(text)
 		"[33;01m"		: "yellow",
 		"[37m"			: "gray",
 		"[36;01m"		: "cyan",
-		"[34;01m"		: "rgb(30, 107, 223)", // blue
+		"[34;01m"		: "rgb(030,107,223)", // blue
 		"[32;01m"		: "rgb(000,255,000)", // green
 	};
 	
