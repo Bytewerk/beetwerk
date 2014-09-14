@@ -7,6 +7,8 @@ Screenshot
 =======
 ![2014-09-14](https://cloud.githubusercontent.com/assets/7833187/4265529/1cc95242-3c54-11e4-9d0b-240cfc21e1a9.png)
 
+Click [here](https://github.com/Bytewerk/beetwerk/issues/1) for more screenshots.
+
 
 Features
 ========
