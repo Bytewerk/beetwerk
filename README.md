@@ -5,8 +5,7 @@ drag 'n' drop music import webinterface for hackerspaces based on beets
 
 Screenshot
 =======
-![2014-09-11-003823_1366x768_scrot](https://cloud.githubusercontent.com/assets/7833187/4255265/2c8f1178-3ab3-11e4-8916-6d474f11e357.png)
-
+![2014-09-14](https://cloud.githubusercontent.com/assets/7833187/4265529/1cc95242-3c54-11e4-9d0b-240cfc21e1a9.png)
 
 
 Features
