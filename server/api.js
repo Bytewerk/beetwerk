@@ -1,10 +1,10 @@
 "use strict";
 
-var pipe = require('./pipe');
-var formidable = require('formidable'); // npm install formidable@latest
+var pipe = require("./pipe");
+var formidable = require("formidable"); // npm install formidable@latest
 var path = require("path");
 var fs = require("fs");
-var cp = require('child_process');
+var cp = require("child_process");
 
 // simple wrapper, that ignores existing folders
 function mkdir(a){try{fs.mkdirSync(a,function(e){});}catch(e){}}
@@ -26,7 +26,7 @@ function sid_folder(config,req,res,args)
 	// Delete folder, if it still exists after 2 hours
 	setTimeout(function()
 	{
-		cp.exec("rm -r '"+dir+"'");
+		cp.exec("rm -r '"+dir+"'", function(){});
 	},2 * 3600 * 1000);
 	
 	return dir;
