@@ -71,10 +71,15 @@ function line(text, color)
 	term.appendChild(pre);
 	
 	pre.innerHTML = colorize(pre.innerHTML);
-	
 	if(color) pre.style.color = color;
 	
-	if(!dont_scroll) term.scrollTop = term.scrollHeight - term.offsetHeight - 5;
+	// lazy clickable links, should be enough for beet import
+	// source: http://stackoverflow.com/a/1500501
+	pre.innerHTML = pre.innerHTML.replace(/(https?:\/\/[^\s]+)/g,
+		'<a href="$1" target="_blank">$1</a>')
+	
+	if(!dont_scroll) term.scrollTop = term.scrollHeight
+		- term.offsetHeight - 5;
 	
 	return pre;
 }
