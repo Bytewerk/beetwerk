@@ -1,6 +1,6 @@
 beetwerk
 ========
-drag 'n' drop music import webinterface for hackerspaces based on beets
+drag 'n' drop music import webinterface for hackerspaces based on [beets](https://github.com/sampsyo/beets)
 
 
 Screenshot
