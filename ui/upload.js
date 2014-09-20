@@ -1,4 +1,5 @@
 "use strict";
+
 var global_upload_done = false;
 
 function upload_single_file(file, callback)

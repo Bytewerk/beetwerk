@@ -7,11 +7,12 @@
 		<link rel="icon" type="image/x-icon" href="favicon.ico">
 		<script src="ui.js"></script>
 		<script src="upload.js"></script>
+		<script src="scrollbar.js"></script>
 	</head>
-	<body onload="init()">
+	<body onload="init()" onresize="scrollbar_draw()">
 		<div id="box">
 			<noscript>This page is no fun without Javascript.</noscript>
-			<div id="terminal">
+			<div id="terminal" onscroll="scrollbar_draw()">
 					<div id="dropsome">
 							<h1>Drop some music here!</h1>
 							(or click to use the upload dialog; full albums preferred)

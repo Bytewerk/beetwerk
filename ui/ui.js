@@ -10,6 +10,8 @@ function init()
 {
 	$("terminal").style.display="block";
 	$("file").style.display="block";
+	
+	scrollbar_init();
 }
 
 function xhr(url,callback)
@@ -81,6 +83,7 @@ function line(text, color)
 	if(!dont_scroll) term.scrollTop = term.scrollHeight
 		- term.offsetHeight - 5;
 	
+	scrollbar_draw();
 	return pre;
 }
 

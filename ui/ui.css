@@ -6,6 +6,7 @@ body
 	color: white;
 	font-family: Monospace, Mono;
 	font-size: 9pt;
+	overflow-x: hidden;
 }
 a
 {
@@ -45,12 +46,13 @@ a
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	right: 0px;
+	/* cheap workaround for hiding the scrollbar, FIXME */
+	right: -50px;
 	height: calc(100% - 85px);
 	display: none;
 	padding: 15px;
-	overflow-y: auto;
-	overflow-x: none;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 
@@ -72,7 +74,7 @@ a
 	text-decoration: none;
 }
 /*
-	Scrollbar -- JS stuff not implemented yet
+	Scrollbar
 */
 #scrollbar
 {
@@ -89,7 +91,7 @@ a
 	position: absolute;
 	top: 0px;
 	width: 100%;
-	height: 100px;
+	height: 10%;
 	background-color: rgb(85,204,204);
 }
 
