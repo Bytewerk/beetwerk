@@ -104,10 +104,11 @@ function terminal_poll()
 		if(!global_no_polling)
 			setTimeout(terminal_poll, answer ? 0 : 500);
 		else
-			line("Beet import has finished with status "
-				+answer.exit_code+". That's "
-				+(answer.exit_code?"bad":"good")+". "
-				+ "To import another album, refresh this page!","gray");
+			line("","gray").innerHTML = "Beet import has finished with status "
+				+ answer.exit_code+". That's "
+				+ (answer.exit_code?"bad":"good")+". "
+				+ "To import another album, "
+				+ "<a href='/'>refresh</a> this page!</a>";
 	});
 }
 
