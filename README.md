@@ -13,8 +13,8 @@ Click [here](https://github.com/Bytewerk/beetwerk/issues/1) for more screenshots
 Features
 ========
 * designed for hackerspaces
-* terminal-like webinterface
 * force everyone to use the awesome [beets](https://github.com/sampsyo/beets) music tagger and get a well organized collection
+* terminal-like webinterface with clickable links and multiple-choice answers
 * no need to share FTP/SSH access for uploading and importing music
 * works with pc, phone and tablet browsers
 * lightweight code with almost no dependencies
