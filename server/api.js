@@ -6,9 +6,14 @@ var path = require("path");
 var fs = require("fs");
 var cp = require("child_process");
 
+/*
+	--------------------------------------------------------------------
+	OTHER FUNCTIONS
+	--------------------------------------------------------------------
+*/
+
 // simple wrapper, that ignores existing folders
 function mkdir(a){try{fs.mkdirSync(a,function(e){});}catch(e){}}
-
 
 // basically one folder per open tab, which consists of:
 // client_ip/tab_open_timestamp
@@ -32,9 +37,28 @@ function sid_folder(config,req,res,args)
 	return dir;
 }
 
-// list free space in the temp folder
-// the temp folder should always be on the same partition as the real
-// target folder of the music collection.
+
+/*
+	--------------------------------------------------------------------
+	API COMMANDS
+	--------------------------------------------------------------------
+	
+	For each possible API command, add a function below with the
+	following syntax:
+	
+	exports.hello = function(config, req, res, args)
+	{
+		// do stuff here
+		res.end('"Hello World!"'); // JSON string!
+	};
+	
+	The above example would get executed, if the browser requested
+	the URL /api/hello.
+*/
+
+
+// list free disk space in the temp folder (should be on the same
+// partition as the music collection anyway)
 exports.df = function(config, req, res, args)
 {
 	cp.execFile("df", ["-h", "--output=avail", config.tempdir],null,
@@ -46,7 +70,7 @@ exports.df = function(config, req, res, args)
 		});
 }
 
-
+// single file upload
 exports.upload = function(config, req, res, args)
 {
 	var dir = sid_folder(config,req,res,args);
@@ -59,29 +83,38 @@ exports.upload = function(config, req, res, args)
 	{
 		var file = files.file;
 		
+		// If the upload has been aborted (eg. by closing the tab),
+		// do nothing
+		if(!file) return res.end("You r doing it rong!");
+		
 		// Formidable generates random names during upload.
 		// This is good, so we can see which files are finished.
 		// For better readability of the beets output, give the
-		// files its original names.
+		// files their original names.
 		fs.rename(file.path,dir+"/"+file.name,function(e){});
 		
 		res.end("true");
 	});
 }
 
+// start "beet import"
 exports.import = function(config, req, res, args)
 {
 	var dir = sid_folder(config,req,res,args);
 	if(!dir) return;
 	
-	res.end(JSON.stringify(pipe.start(dir, config.binary, ["import","--nocopy",dir])));
+	res.end(JSON.stringify(pipe.start(dir, config.binary,
+		["import","--nocopy",dir])));
 }
 
+// poll for new output of "beet import"
 exports.poll = function(config, req, res, args)
 {
 	var buffer_id = sid_folder(config,req,res,args);
 	res.end(JSON.stringify(pipe.poll(buffer_id, args.version)));
 }
+
+// send a string to the stdin of "beet import"
 exports.send = function(config, req, res, args)
 {
 	var buffer_id = sid_folder(config,req,res,args);
