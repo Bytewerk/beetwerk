@@ -35,9 +35,9 @@ function sid_folder(config,req,res,args)
 // list free space in the temp folder
 // the temp folder should always be on the same partition as the real
 // target folder of the music collection.
-exports.df = function(config, req, res,args)
+exports.df = function(config, req, res, args)
 {
-	var bin = cp.execFile("df", ["-h", "--output=avail", config.tempdir],null,
+	cp.execFile("df", ["-h", "--output=avail", config.tempdir],null,
 		function(error,stdout,stderr)
 		{
 			var data = stdout.split("\n");

@@ -12,11 +12,11 @@ function init()
 	$("file").style.display="block";
 	
 	scrollbar_init();
+	
 	xhr("df",function(answer)
 	{
 		line("Free disk space: "+answer);
 	});
-	
 }
 
 function xhr(url,callback)
