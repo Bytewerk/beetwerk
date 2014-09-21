@@ -8,11 +8,13 @@ body
 	font-size: 9pt;
 	overflow-x: hidden;
 }
+
 a
 {
 	color: white;
+	font-weight: bold;
+	text-decoration: none;
 }
-
 
 #box
 {
@@ -40,7 +42,9 @@ a
 	opacity: 0;
 }
 
-
+/*
+	Terminal
+*/
 #terminal
 {
 	position: absolute;
@@ -54,8 +58,23 @@ a
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
+#terminal a:hover
+{
+	text-decoration: underline;
+}
+.inline_button
+{
+	font-weight: bold;
+	cursor: pointer;
+}
+.inline_button:hover
+{
+	text-decoration: underline;
+}
 
-
+/*
+	Top Right Links
+*/
 #top_right_links
 {
 	position: absolute;
@@ -69,10 +88,9 @@ a
 	float: left;
 	padding: 20px;
 	font-size: 12pt;
-	font-weight: bold;
 	margin: 0px 10px;
-	text-decoration: none;
 }
+
 /*
 	Scrollbar
 */

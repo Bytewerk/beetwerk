@@ -133,13 +133,14 @@ function upload_start()
 		"rgb(000,255,000)");
 	
 	$("file").style.display="none";
+	window.focus();
+	
 	upload_all(function()
 	{
 		if(global_upload_done) return;
 		global_upload_done = true;
 		line("(Step 2/2) Analyzing and importing music (this may take a few minutes, please be patient)...",
 		"rgb(000,255,000)");
-		$("commandline").focus();
 		upload_import();
 	});
 }
