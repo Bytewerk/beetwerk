@@ -67,6 +67,7 @@ exports.start = function(id, command, args)
 	// Kill process and delete buffer after 60 minutes
 	setTimeout(function()
 	{
+		if(!buffers[id]) return;
 		buffer_append("[31;01m" // red font
 			+ "Timeout has been reached, killing process!");
 		buffers[id].exit_code = -1;
