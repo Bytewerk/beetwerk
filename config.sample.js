@@ -2,7 +2,7 @@ exports.port = 1234;
 
 // put this on the same partition as the imported
 // music collection to avoid unnecessary copying
-exports.tempdir = "./tempdir";
+exports.tempdir = "/tempdir/on/same/partition/as/music/collection";
 
 // when beets was installed via pip, you may use
 // something like this instead:

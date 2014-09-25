@@ -1,6 +1,7 @@
 "use strict";
 
 var pipe = require("./pipe");
+var other = require("./other");
 var formidable = require("formidable"); // npm install formidable@latest
 var path = require("path");
 var fs = require("fs");
@@ -12,9 +13,6 @@ var cp = require("child_process");
 	--------------------------------------------------------------------
 */
 
-// simple wrapper, that ignores existing folders
-function mkdir(a){try{fs.mkdirSync(a,function(e){});}catch(e){}}
-
 // basically one folder per open tab, which consists of:
 // client_ip/tab_open_timestamp
 function sid_folder(config,req,res,args)
@@ -23,10 +21,10 @@ function sid_folder(config,req,res,args)
 	
 	// create temporary upload folder, if it doesn't exist yet
 	var dir = path.join(config.tempdir+"/"+req.connection.remoteAddress);
-	mkdir(config.tempdir);
-	mkdir(dir);
+	other.mkdir(config.tempdir);
+	other.mkdir(dir);
 	dir = path.join(dir+"/"+(args.sid*1));
-	mkdir(dir);
+	other.mkdir(dir);
 	
 	// Delete folder, if it still exists after 2 hours
 	setTimeout(function()
