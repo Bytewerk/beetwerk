@@ -2,16 +2,16 @@
 	"name": "beetwerk",
 	"description": "Drag 'n' drop music import webinterface for hackerspaces based on beets",
 	"homepage": "https://github.com/Bytewerk/beetwerk",
-	"version": "0.1",
+	"version": "0.1.0",
 	"license": "GPL-2.0",
 	"dependencies":
 	{
-		"formidable": ">=1.0.15",
+		"formidable": ">=1.0.15"
 	},
 	"bin":
 	{
 		"beetwerk": "./beetwerk.js"
-	}
+	},
 	"engines":
 	{
 		"node": ">=0.8.0"
@@ -25,5 +25,5 @@
 	{
 		"url": "https://github.com/Bytewerk/beetwerk/issues"
 	},
-	"os" : [ "!win32" ],
+	"os" : [ "!win32" ]
 }
