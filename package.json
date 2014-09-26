@@ -2,7 +2,7 @@
 	"name": "beetwerk",
 	"description": "Drag 'n' drop music import webinterface for hackerspaces based on beets",
 	"homepage": "https://github.com/Bytewerk/beetwerk",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"license": "GPL-2.0",
 	"dependencies":
 	{
@@ -10,7 +10,7 @@
 	},
 	"bin":
 	{
-		"beetwerk": "./beetwerk.js"
+		"beetwerk": "./beetwerk.sh"
 	},
 	"engines":
 	{
