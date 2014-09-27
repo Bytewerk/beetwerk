@@ -37,6 +37,6 @@ Requirements
 
 Installation
 =======
-Have a look at the [Hackerspace Music Server Guide](https://github.com/Bytewerk/beetwerk/wiki/Hackerspace-Music-Server-Guide) in the wiki. tl;dr version:
+Have a look at the [Hackerspace Music Server Guide](https://github.com/Bytewerk/beetwerk/wiki/Hackerspace-Music-Server-Guide) in the wiki. Tl;dr version:
 
 ```% npm install beetwerk```
