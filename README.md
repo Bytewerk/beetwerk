@@ -31,7 +31,7 @@ Requirements
 ========
 * beets with a working and tested configuration
 * nodejs
-* formidable (install with: ```npm install formidable@latest```)
+* formidable
 * currently has some hard dependencies on UNIX (eg. rm, df get called). It shouldn't be a problem to port it though, so if anyone needs this on another OS, feel free to fork it and send a pull request.
 
 
