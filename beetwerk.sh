@@ -4,7 +4,7 @@
 # This file should be symlinked to your bin directory, eg:
 # /usr/bin/beetwerk
 
-# Get the directory of the script file,even if it was symlinked by npm
+# Get the directory of the script file, even if it was symlinked by npm
 # Source: http://stackoverflow.com/a/246128
 # resolve $src until the file is no longer a symlink
 src="${BASH_SOURCE[0]}"
