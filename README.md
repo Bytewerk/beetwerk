@@ -24,12 +24,19 @@ Features
 
 Status
 ========
-Beta software. Please make bug reports, in case it crashes.
+Beta software. Please make [bug reports](https://github.com/Bytewerk/beetwerk/issues), in case it crashes.
 
 
 Requirements
 ========
-* beets with a working configuration (test this!)
+* beets with a working and tested configuration
 * nodejs
 * formidable (install with: ```npm install formidable@latest```)
-* currently has some hard dependencies on UNIX (rm, df get called). It shouldn't be a problem to port it though, so if anyone needs this on another OS, feel free to fork it and send a pull request.
+* currently has some hard dependencies on UNIX (eg. rm, df get called). It shouldn't be a problem to port it though, so if anyone needs this on another OS, feel free to fork it and send a pull request.
+
+
+Installation
+=======
+Have a look at the [Hackerspace Music Server Guide](https://github.com/Bytewerk/beetwerk/wiki/Hackerspace-Music-Server-Guide) in the wiki. tl;dr version:
+
+```% npm install beetwerk```
