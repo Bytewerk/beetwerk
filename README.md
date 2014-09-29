@@ -16,7 +16,7 @@ Features
 * force everyone to use the awesome [beets](https://github.com/sampsyo/beets) music tagger and get a well organized collection
 * terminal-like webinterface with clickable links and multiple-choice answers
 * no need to share FTP/SSH access for uploading and importing music
-* works with pc, phone and tablet browsers
+* should works with pc, phone and tablet [browsers](https://github.com/Bytewerk/beetwerk/wiki/Supported-Browsers)
 * lightweight code with almost no dependencies
 * [simple config](https://github.com/Bytewerk/beetwerk/blob/master/config.sample.js)
 
