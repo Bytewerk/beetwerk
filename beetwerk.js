@@ -43,4 +43,23 @@ if(!config || !config.port || !config.tempdir || !config.binary)
 }
 
 
+// In case an exception gets thrown, keep the server running
+// and print an error message on the terminal. This probably
+// happens, when the network connection goes down.
+// Related bug: https://github.com/Bytewerk/beetwerk/issues/4
+process.on("uncaughtException", function (e)
+{
+	console.error("----------------------------------------------");
+	console.error(new Date());
+	console.error("Unhandled exception, did the network go down?");
+	console.error("This is probably related to this bug:")
+	console.error("=> http://tinyurl.com/bw-netcrash");
+	console.error("Please leave a comment there with the output below.");
+	console.error("");
+	console.error("Type: " + e.type);
+	console.error(e.stack);
+	console.error("----------------------------------------------");
+});
+
+
 server.run(config);
