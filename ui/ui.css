@@ -83,12 +83,16 @@ a
 }
 #top_right_links a
 {
-	display: block;
 	background-color: rgb(85,204,204);
 	float: left;
 	padding: 20px;
 	font-size: 12pt;
 	margin: 0px 10px;
+}
+
+#guide
+{
+	display: none;
 }
 
 /*

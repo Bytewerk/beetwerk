@@ -1,23 +1,22 @@
 "use strict";
 
 var global_sid = +new Date();
-var global_no_polling = true;
 var global_poll_version = 0;
+var global_process_running = false; // is beets/youtube-dl running?
+var global_question_callback;
 
 function $(a) {return document.getElementById(a);}
 
-function init()
+function check_answer(valid, answer, is_not_a_number /*=false*/)
 {
-	$("terminal").style.display="block";
-	$("file").style.display="block";
+	if(!is_not_a_number) answer = 1*answer;
+	if(valid.indexOf(answer) > -1) return true;
 	
-	scrollbar_init();
-	
-	xhr("df",function(answer)
-	{
-		line("Free disk space: "+answer);
-	});
+	line("").innerHTML="You fucked up and need to <a href='/'>reload</a> the page.";
+	global_question_callback = function(){line("You heard me.");};
+	throw "invalid input fuckup";
 }
+
 
 function xhr(url,callback)
 {
@@ -38,9 +37,9 @@ function xhr(url,callback)
 function buttonize(text)
 {
 	// List of album candidates. They always start with the index
-	// number and contain gray text somewhere
+	// number, followed by a dot.
 	var index = text.split(".")[0]*1;
-	if(index > 0 && text.indexOf("[37m") > -1)
+	if(index > 0)
 		return '<span class="inline_button" '
 			+ 'onclick="terminal_send('+index+')">'
 			+ text +'</span>';
@@ -154,9 +153,9 @@ function terminal_poll()
 				line(lines[i]);
 			
 			global_poll_version = answer.version;
-			if(!answer.is_running) global_no_polling = true;
+			if(!answer.is_running) global_process_running = false;
 		}
-		if(!global_no_polling)
+		if(global_process_running)
 			setTimeout(terminal_poll, answer ? 0 : 500);
 		else
 			line("","gray").innerHTML = "Beet import has finished with status "
@@ -180,12 +179,19 @@ function terminal_send(/*optional*/val)
 		button.onclick = button.className = "";
 	}
 	
-	// Display the input after it has been received by the server
-	xhr("send?string="+encodeURIComponent(val+'\n'), function(answer)
+	if(global_process_running)
 	{
-		if(answer) line(val, "purple");
-	});
-	
+		// Display the input after it has been received by the server
+		xhr("send?string="+encodeURIComponent(val+'\n'), function(answer)
+		{
+			if(answer) line(val, "purple");
+		});
+	}
+	else
+	{
+		line(val, "purple");
+		global_question_callback(val);
+	}
 	
 	$("commandline").value = "";
 }

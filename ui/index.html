@@ -6,28 +6,25 @@
 		<link rel="stylesheet" type="text/css" href="ui.css">
 		<link rel="icon" type="image/x-icon" href="favicon.ico">
 		<script src="ui.js"></script>
+		<script src="intro.js"></script>
 		<script src="upload.js"></script>
 		<script src="scrollbar.js"></script>
 	</head>
-	<body onload="init()" onresize="scrollbar_draw()">
+	<body onload="intro()" onresize="scrollbar_draw()">
 		<div id="box">
 			<noscript>This page is no fun without Javascript.</noscript>
-			<div id="terminal" onscroll="scrollbar_draw()">
-					<div id="dropsome">
-							<h1>Drop some music here!</h1>
-							(or click to use the upload dialog; full albums preferred)
-					</div>
-			</div>
+			<div id="terminal" onscroll="scrollbar_draw()"></div>
 			<input id="file" onchange="upload_start()" type="file" multiple>
 			<div id="top_right_links">
-				<a target="_blank" href="https://beets.readthedocs.org/en/latest/guides/tagger.html#similarity">GUIDE</a>
+				<a target="_blank" href="https://beets.readthedocs.org/en/latest/guides/tagger.html#similarity"
+					id="guide">GUIDE</a>
 				<a target="_blank" href="https://github.com/Bytewerk/beetwerk">GITHUB</a>
 				<a target="_blank" href="http://bytewerk.org">BYTEWERK</a>
 			</div>
 			<div id="scrollbar" class="fadein">
 				<div id="knob"></div>
 			</div>
-			<form onsubmit="terminal_send();return false">
+			<form onsubmit="try{terminal_send();}catch(e){};return false">
 				<input id="commandline" placeholder="click here to type">
 			</form>
 		</div>

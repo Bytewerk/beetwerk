@@ -1,6 +1,7 @@
 "use strict";
 
 var global_upload_done = false;
+var global_upload_callback;
 
 function upload_single_file(file, callback)
 {
@@ -112,7 +113,7 @@ function upload_import()
 {
 	xhr("import", function()
 	{
-		global_no_polling = false;
+		global_process_running = true;
 		setTimeout(terminal_poll, 500);
 	});
 }
@@ -128,7 +129,7 @@ function upload_start()
 		total_size+= files[i].size;
 	
 	var c = files.length;
-	line("(Step 1/2) Uploading "+c+" file" + (c==1?"":"s")
+	line("Uploading "+c+" file" + (c==1?"":"s")
 		+ " ("+Math.floor(total_size/1024/1024*10)/10+" MiB)...",
 		"rgb(000,255,000)");
 	
@@ -139,9 +140,7 @@ function upload_start()
 	{
 		if(global_upload_done) return;
 		global_upload_done = true;
-		line("(Step 2/2) Analyzing and importing music (this may take a few minutes, please be patient)...",
-		"rgb(000,255,000)");
-		upload_import();
+		global_upload_callback();
 	});
 }
 
