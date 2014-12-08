@@ -119,6 +119,15 @@ exports.send = function(config, req, res, args)
 	res.end(JSON.stringify(pipe.send(buffer_id, args.string)));
 }
 
+exports.ytdl = function(config, req, res, args)
+{
+	var dir = sid_folder(config,req,res,args);
+	if(!dir) return;
+	var url = args.url;
+	
+	res.end(JSON.stringify(pipe.start(dir, 'youtube-dl',
+		["--restrict-filenames", "-x", "-f", "bestaudio/best", args.url], dir)));
+}
 
 
 

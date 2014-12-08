@@ -7,7 +7,7 @@ var cp = require('child_process');
 var buffers = {};
 
 // Start a command and fill buffer[id]
-exports.start = function(id, command, args)
+exports.start = function(id, command, args /*optional */, working_dir /*optional*/)
 {
 	// Start the program
 	args = args || [];
@@ -16,7 +16,8 @@ exports.start = function(id, command, args)
 		// force python to flush stdout all the time
 		// http://stackoverflow.com/a/230780
 		// https://github.com/sampsyo/beets/issues/923
-		env: {"PYTHONUNBUFFERED": true}
+		env: {"PYTHONUNBUFFERED": true},
+		cwd: working_dir || null
 	});
 	if(!bin) return false;
 	

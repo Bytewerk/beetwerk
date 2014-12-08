@@ -115,13 +115,30 @@ function colorize(text)
 function line(text, /*optional*/ color)
 {
 	var term = $("terminal");
+	var pre = document.createElement("pre");
+	
+	
+	/*
+		youtube-dl throws back lots of [download] lines (in one function
+		call of line()!) with the current status. Limit this to one line,
+		and remove the previous ones.
+	*/
+	text = ""+text;
+	if(text && text.indexOf("[download]") > -1)
+	{
+		var old = $("ytdl-status");
+		if(old) old.parentNode.removeChild(old);
+		
+		var dl = text.split("[download]");
+		text = "[download]"+dl[dl.length -1];
+		pre.id="ytdl-status";
+	}
 	
 	// only scroll, if the terminal is already scrolled to the bottom!
 	// FIXME: doesn't always work
 	var dont_scroll =
 		term.scrollHeight > term.scrollTop + term.offsetHeight + 15;
 	
-	var pre = document.createElement("pre");
 	pre.appendChild(document.createTextNode(text));
 	term.appendChild(pre);
 	
@@ -137,6 +154,7 @@ function line(text, /*optional*/ color)
 	if(!dont_scroll) term.scrollTop = term.scrollHeight
 		- term.offsetHeight - 5;
 	
+	
 	scrollbar_draw();
 	return pre;
 }
@@ -150,7 +168,14 @@ function terminal_poll()
 		{
 			var lines = answer.string.split('\n');
 			for(var i=0;i<lines.length;i++)
+			{
+				// don't show notification from youtube-dl, that it has
+				// just deleted the video file (after extracting the audio),
+				// because that is just what we want it to do
+				if(lines[i].indexOf("(pass -k to keep)") > -1)
+					continue;
 				line(lines[i]);
+			}
 			
 			global_poll_version = answer.version;
 			if(!answer.is_running) global_process_running = false;

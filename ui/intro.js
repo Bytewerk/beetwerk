@@ -1,4 +1,9 @@
 /*
+	In this file is basically all terminal i/o that shows up before we send
+	anything to beets.
+*/
+
+/*
 	Get the free space from the server, then display the 'well known' vs.
 	'exotic' music selection. On timeout, display an error.
 */
@@ -24,14 +29,14 @@ function intro()
 		line("\tadd or correct the metadata (beware, this takes some time).The")
 		line("\tpath for your music will be automatically choosen.");
 		line("\n");
-		line("2. Exotic:");
+		line("2. Exotic (STUB, DO NOT USE YET):");
 		line("\tRather unknown tracks or remixes that you have made yourself");
 		line("\tor found on YouTube / similar streaming sites, as well as full");
 		line("\tDJ-sets that include lots of songs in one file with sick cross-");
 		line("\tfades.");
 		line("\n");
 		line("\tYou'll be able to give the stream URL (youtube-dl compatible) or");
-		line("\tupload files. After that you can specify album, artist and path");
+		line("\tupload files. After that you can specify track, artist and path");
 		line("\twhere it should be stored.");
 		line("\n");
 		line("This page works mostly like a terminal, so you can type the number of your");
@@ -60,16 +65,17 @@ function intro_type_selected(val)
 		{
 			line("Analyzing and importing music (this may take a few minutes, please be patient)...",
 			"rgb(000,255,000)");
+			$("guide").style.display="block";
 			upload_import();
 		};
-		return intro_upload_start();
+		intro_upload_start();
 	}
 	
 	if(val == 2) // exotic
 	{
-		line("So where's that strange unknown music you're talking about?");
-		line("1. Stream URL");
-		line("2. Upload");
+		line("So where can I get that true underground shit you're talking about?");
+		line("1. From a secret stream URL");
+		line("2. Only on my PC of course");
 		global_question_callback = intro_exotic_source_selected;
 	}
 }
@@ -84,10 +90,32 @@ function intro_upload_start()
 function intro_exotic_source_selected(val)
 {
 	line("\n");
-	line("STUB: This hasn't been implemented yet.");
-	check_answer([], val);
+	check_answer([1,2], val);
 	
-	//if(val == 2) // upload
-	//	return intro_upload_start();
+	if(val == 1) // youtube URL
+	{
+		line("").innerHTML="Paste it in the box below and I'll throw it at youtube-dl "
+			+ "<a target='_blank' href='https://rg3.github.io/youtube-dl/supportedsites.html'>"
+			+ "(supported sites):</a>";
+		$("commandline").focus();
+		global_question_callback = function(url)
+		{
+			xhr("ytdl?url="+encodeURIComponent(url), function(answer)
+			{
+				if(!answer) return line("").innerHTML= "ERROR: Something has gone wrong, please"
+					+ "<a href='https://github.com/Bytewerk/beetwerk/issues'>report this.</a>";
+				global_process_running = true;
+				setTimeout(terminal_poll, 500);
+			});
+		}
+	}
 	
+	if(val == 2) // upload
+	{
+		global_upload_callback = function()
+		{
+			line("STUB.");
+		};
+		intro_upload_start();
+	}
 }
