@@ -129,5 +129,17 @@ exports.ytdl = function(config, req, res, args)
 		["--restrict-filenames", "-x", "-f", "bestaudio/best", args.url], dir)));
 }
 
+// try to get the album tag of the files in the temp folder
+exports.metaread = function(config, req, res, args)
+{
+	var dir = sid_folder(config,req,res,args);
+	
+	cp.execFile("exiftool", ["-json", "-Album", "-Artist",
+		"-Track", "-Title","-Genre", "-MIMEType","."],{cwd:dir},
+	function(error,stdout,stderr)
+	{
+		res.end(stdout);
+	});
+}
 
 

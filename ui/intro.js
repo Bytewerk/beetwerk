@@ -73,9 +73,9 @@ function intro_type_selected(val)
 	
 	if(val == 2) // exotic
 	{
-		line("So where can I get that true underground shit you're talking about?");
+		line("So where can we get that true underground shit you're talking about?");
 		line("1. From a secret stream URL");
-		line("2. Only on my PC of course");
+		line("2. Only from my PC of course");
 		global_question_callback = intro_exotic_source_selected;
 	}
 }
@@ -114,8 +114,62 @@ function intro_exotic_source_selected(val)
 	{
 		global_upload_callback = function()
 		{
-			line("STUB.");
+			intro_manual_tagging();
 		};
 		intro_upload_start();
 	}
 }
+
+
+function intro_manual_tagging()
+{
+	// - Server should check for the existing metadata (artist, album)
+	// - display the artist (then album) to the user and ask if it is correct:
+	//		Artist [Breathe Carolina]: 
+	// - then for every track, ask for the title and track number
+	// - At the end, ask if the user wants to type in the data again or if it is correct
+	// - write the metadata via exiftool (apicall!)
+	
+	line("Please tag your upload carefully (hit return for the suggested values)!");
+	line("\n");
+	
+	xhr("metaread", function(answer)
+	{
+		var artist = answer[0]["Artist"] || "";
+		var album  = answer[0]["Album"]  || "";
+		var genre  = answer[0]["Genre"]  || "";
+		
+		
+		line("Common metadata:");
+		line("\t(required) Artist: ['"+artist+"']: ");
+		line("\t(optional) Album:  ['"+album +"']: ");
+		line("\t(required) Genre:  ['"+genre +"']: ");
+		
+		for(var i=0;i<answer.length;i++)
+		{
+			if(answer[i]["MIMEType"].indexOf("audio") == -1) continue;
+			var title = answer[i]["Title"] || ""
+			var file  = (answer[i]["SourceFile"]).substr(2);
+			var track = answer[i]["Track"] || (i+1);
+			line(file+":");
+			line("\tTitle: ['"+title+"']: ");
+			line("\tTrack: ["+track+"]: ");
+		}
+	});
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
