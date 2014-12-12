@@ -134,8 +134,9 @@ exports.metaread = function(config, req, res, args)
 {
 	var dir = sid_folder(config,req,res,args);
 	
+	// todo: generate this from the new config!
 	cp.execFile("exiftool", ["-json", "-Album", "-Artist",
-		"-Track", "-Title","-Genre", "-MIMEType","."],{cwd:dir},
+		"-Track", "-Title","-Genre", "-Year", "-MIMEType","."],{cwd:dir},
 	function(error,stdout,stderr)
 	{
 		res.end(stdout);

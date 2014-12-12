@@ -1,5 +1,12 @@
 "use strict";
 
+/*
+	TODO: check for required programs:
+		exiftool
+		youtube-dl (or don't provide the option!)
+*/
+
+
 var fs = require("fs");
 process.chdir(__dirname); // cd to this file's directory
 

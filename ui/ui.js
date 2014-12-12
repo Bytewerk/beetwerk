@@ -4,6 +4,7 @@ var global_sid = +new Date();
 var global_poll_version = 0;
 var global_process_running = false; // is beets/youtube-dl running?
 var global_question_callback;
+var global_exec_callback; // will get the return code as parameter
 
 function $(a) {return document.getElementById(a);}
 
@@ -134,6 +135,9 @@ function line(text, /*optional*/ color)
 		pre.id="ytdl-status";
 	}
 	
+	// Disable youtube-dl messages that say it won't convert audio files
+	if(text.indexOf("[youtube] Post-process file ") > -1) return;
+	
 	// only scroll, if the terminal is already scrolled to the bottom!
 	// FIXME: doesn't always work
 	var dont_scroll =
@@ -183,11 +187,7 @@ function terminal_poll()
 		if(global_process_running)
 			setTimeout(terminal_poll, answer ? 0 : 500);
 		else
-			line("","gray").innerHTML = "Beet import has finished with status "
-				+ answer.exit_code+". That's "
-				+ (answer.exit_code?"bad":"good")+". "
-				+ "To import another album, "
-				+ "<a href='/'>refresh</a> this page!</a>";
+			global_exec_callback(answer.exit_code);
 	});
 }
 

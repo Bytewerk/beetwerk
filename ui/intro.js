@@ -1,6 +1,7 @@
 /*
 	In this file is basically all terminal i/o that shows up before we send
 	anything to beets.
+	
 */
 
 /*
@@ -18,31 +19,19 @@ function intro()
 		line("").innerHTML="<h1>beetwerk 0.2</h1>";
 		line("Free disk space: "+free);
 		line("\n");
-		line("What kind of music do you wish to import?");
+		line("So where can we get that true underground shit you're talking about?");
 		line("\n");
-		line("1. Well known:");
-		line("\tA song or an album that has probably already been indexed by");
-		line("\tmusic database sites, such as musicbrainz.org and discogs.com.");
-		line("\tIn other words, music from a record label or from Jamendo.org.");
-		line("\n");
-		line("\tWe'll try to match your upload against data on these sites and");
-		line("\tadd or correct the metadata (beware, this takes some time).The")
-		line("\tpath for your music will be automatically choosen.");
-		line("\n");
-		line("2. Exotic (STUB, DO NOT USE YET):");
-		line("\tRather unknown tracks or remixes that you have made yourself");
-		line("\tor found on YouTube / similar streaming sites, as well as full");
-		line("\tDJ-sets that include lots of songs in one file with sick cross-");
-		line("\tfades.");
-		line("\n");
-		line("\tYou'll be able to give the stream URL (youtube-dl compatible) or");
-		line("\tupload files. After that you can specify track, artist and path");
-		line("\twhere it should be stored.");
+		line("1. Only from my PC of course");
+		line("\tYou'll be able to upload a file or album from your laptop,");
+		line("\tphone, tablet, FreeBSD toaster or whatever you are using.");
+		line("2. From a secret stream URL");
+		line("\tChoose this option to let the server download a song from");
+		line("\t").innerHTML+="a <a target='_blank' href='https://rg3.github.io/youtube-dl/supportedsites.html'>youtube-dl compatible</a> website.";
 		line("\n");
 		line("This page works mostly like a terminal, so you can type the number of your");
 		line("selection in the box below. But you may also click it with your mouse.");
 		
-		global_question_callback = intro_type_selected;
+		global_question_callback = intro_source_selected;
 	});
 	
 	setTimeout(2000,function()
@@ -53,53 +42,26 @@ function intro()
 	
 }
 
-function intro_type_selected(val)
+function intro_source_selected(val)
 {
 	check_answer([1,2], val);
 	
 	line("\n");
 	
-	if(val == 1) // well known
+	if(val == 1) // only from my pc
 	{
-		global_upload_callback = function()
-		{
-			line("Analyzing and importing music (this may take a few minutes, please be patient)...",
-			"rgb(000,255,000)");
-			$("guide").style.display="block";
-			upload_import();
-		};
-		intro_upload_start();
+		intro_upload_start(intro_files_ready);
 	}
 	
-	if(val == 2) // exotic
+	if(val == 2) // stream URL
 	{
-		line("So where can we get that true underground shit you're talking about?");
-		line("1. From a secret stream URL");
-		line("2. Only from my PC of course");
-		global_question_callback = intro_exotic_source_selected;
-	}
-}
-
-function intro_upload_start()
-{
-	$("file").style.display="block";
-	line("").innerHTML="<h2 id='dropsome'>DRAG FILE(S) HERE!</h2>";
-	line("(or click to open the upload dialog)");
-}
-
-function intro_exotic_source_selected(val)
-{
-	line("\n");
-	check_answer([1,2], val);
-	
-	if(val == 1) // youtube URL
-	{
-		line("").innerHTML="Paste it in the box below and I'll throw it at youtube-dl "
-			+ "<a target='_blank' href='https://rg3.github.io/youtube-dl/supportedsites.html'>"
-			+ "(supported sites):</a>";
+		line("").innerHTML="Throw it in the box below and I'll have a look.";
 		$("commandline").focus();
 		global_question_callback = function(url)
 		{
+			global_exec_callback = intro_files_ready;
+			
+			line("Firing up youtube-dl...");
 			xhr("ytdl?url="+encodeURIComponent(url), function(answer)
 			{
 				if(!answer) return line("").innerHTML= "ERROR: Something has gone wrong, please"
@@ -109,67 +71,78 @@ function intro_exotic_source_selected(val)
 			});
 		}
 	}
-	
-	if(val == 2) // upload
-	{
-		global_upload_callback = function()
-		{
-			intro_manual_tagging();
-		};
-		intro_upload_start();
-	}
 }
 
-
-function intro_manual_tagging()
+function intro_files_ready()
 {
-	// - Server should check for the existing metadata (artist, album)
-	// - display the artist (then album) to the user and ask if it is correct:
-	//		Artist [Breathe Carolina]: 
-	// - then for every track, ask for the title and track number
-	// - At the end, ask if the user wants to type in the data again or if it is correct
-	// - write the metadata via exiftool (apicall!)
-	
-	line("Please tag your upload carefully (hit return for the suggested values)!");
-	line("\n");
-	
-	xhr("metaread", function(answer)
+	meta_read(function()
 	{
-		var artist = answer[0]["Artist"] || "";
-		var album  = answer[0]["Album"]  || "";
-		var genre  = answer[0]["Genre"]  || "";
+		var temp = global_tags_tempfolder;
+		if(!temp.length) return line("ERROR: there are no music files in the temp folder!");
 		
 		
-		line("Common metadata:");
-		line("\t(required) Artist: ['"+artist+"']: ");
-		line("\t(optional) Album:  ['"+album +"']: ");
-		line("\t(required) Genre:  ['"+genre +"']: ");
-		
-		for(var i=0;i<answer.length;i++)
+		var has_meta = meta_has_required();
+		if(has_meta)
 		{
-			if(answer[i]["MIMEType"].indexOf("audio") == -1) continue;
-			var title = answer[i]["Title"] || ""
-			var file  = (answer[i]["SourceFile"]).substr(2);
-			var track = answer[i]["Track"] || (i+1);
-			line(file+":");
-			line("\tTitle: ['"+title+"']: ");
-			line("\tTrack: ["+track+"]: ");
+			line("\n");
+			line("Existing metadata:");
+			line("\n");
+			meta_print_existing();
 		}
+		
+		
+		// How should we tag this?
+		line("\n");
+		if(has_meta) line("How do you want to modify the tags listed above?");
+		else line("How do you want to tag this?");
+		line("\n");
+		
+		line("1. First manually, then via beets");
+		line("\tYou'll be able to type in all tags manually (existing tags will");
+		line("\tbe suggested as default, so you just need to press the enter key).");
+		line("\tAfter that, the automagic beets tagger will try its best to find");
+		line("\ttags in a music database such as musicbrainz or discogs.");
+		line("\n");
+		line("\tChoose this, if you see that there are wrong or missing tags");
+		line("\t(manually add/edit them) and your music isn't too exotic (it");
+		line("\tis owned by a record label or is from Jamendo).");
+		line("\n");
+		line("2. Via beets only");
+		line("\tUse this if it is already tagged pretty well and the music isn't");
+		line("\ttoo exotic. beets will either automatically detect the album and");
+		line("\tmake sure that all tags are perfect, or present you with a list");
+		line("\tof album candidates that you can choose from.");
+		line("\n");
+		line("3. Manually only");
+		line("\tFull length DJ-sets in one file, very rare tracks, music you made");
+		line("\tyourself and remixes that your cat made go here!");
+		line("\n");
+		if(has_meta) line("4. Just import");
+		line("\tOnly use this option, if you are one hundred percent sure that");
+		line("\teverything was tagged right, possibly because you have produced");
+		line("\tthe music yourself.");
+		
+		global_question_callback = function(val)
+		{
+			// verify if the answer is right
+			var valid = [1,2,3];
+			if(has_meta) valid.push(4);
+			check_answer(valid, val);
+			
+			
+		};
+		
 	});
-	
 }
 
-
-
-
-
-
-
-
-
-
-
-
+function intro_upload_start(callback)
+{
+	global_upload_callback = callback;
+	
+	$("file").style.display="block";
+	line("").innerHTML="<h2 id='dropsome'>DRAG FILE(S) HERE!</h2>";
+	line("(or click to open the upload dialog)");
+}
 
 
 
