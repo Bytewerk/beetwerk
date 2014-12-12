@@ -1,35 +1,37 @@
 "use strict";
 
+// Contains all tags of files in the temp folder,
+// as spit out by exiftool.
 var global_tags_tempfolder = null;
 
-// move this to the config file, make it accessible by
+// TODO: move this to the config file, make it accessible by
 // the server!
 
-var global_tag_cfg =
+var global_tags_cfg =
 {
-	optional:
+	album:
 	{
-		album: ["Year"],
-		file:  ["Track"]
+		optional: ["Album", "Year"],
+		required: ["Artist", "Genre"]
 	},
-	required:
+	file:
 	{
-		album: ["Artist", "Album", "Genre"],
-		file:  ["Title"]
+		optional: ["Track"],
+		required: ["Title"]
 	}
-	
 };
 
 
 function meta_longest_tag()
 {
-	var cfg = global_tag_cfg;
+	var cfg = global_tags_cfg;
 	var max = 0;
 	
-	for(var i in cfg) for(var j in cfg[i])
-		for(var k=0;k<cfg[i][j].length;k++)
-			if(cfg[i][j][k].length > max)
-				max = cfg[i][j][k].length;
+	for(var where in cfg)
+		for(var req in cfg[where])
+			for(var i=0;i<cfg[where][req].length;i++)
+				if(cfg[where][req][i].length > max)
+					max = cfg[where][req][i].length;
 	
 	return max;
 }
@@ -64,20 +66,15 @@ function meta_read(callback)
 function meta_has_required()
 {
 	var temp		= global_tags_tempfolder;
-	var cfg			= global_tag_cfg;
-	var per_album	= cfg.required.album;
-	var per_file	= cfg.required.file;
+	var cfg			= global_tags_cfg;
 	
-	// album data
-	for(var i=0; i<per_album.length;i++)
-		if(!temp[0][per_album[i]])
-			return false;
-	
-	// file data
-	for(var i=0;i<per_file.length;i++)
-		for(var j=0;j<temp.length;j++)
-			if(!temp[j][per_file[i]])
-				return false;
+	// iterate over all required fields (album, file)
+	// in all temp files and check if one is missing.
+	for(var i=0;i<temp.length;i++)
+		for(var where in cfg)
+			for(var j=0;j<cfg[where]["required"].length;j++)
+				if(!temp[i][ cfg[where]["required"][j] ])
+					return false;
 	
 	return true;
 }
@@ -87,7 +84,7 @@ function meta_has_required()
 function meta_print_existing()
 {			
 	var temp = global_tags_tempfolder;
-	var cfg  = global_tag_cfg;
+	var cfg  = global_tags_cfg;
 	var long = meta_longest_tag();
 	var info = function(tag, file)
 	{
@@ -99,10 +96,9 @@ function meta_print_existing()
 	
 	// album data
 	line("> Album Information:");
-	for(var i=0; i<cfg.required.album.length; i++)
-		info(cfg.required.album[i]);
-	for(var i=0; i<cfg.optional.album.length; i++)
-		info(cfg.optional.album[i]);
+	for(var req in cfg.album)
+		for(var i=0; i<cfg["album"][req].length; i++)
+			info(cfg["album"][req][i]);
 
 	// file data
 	for(var i=0; i<temp.length;i++)
@@ -111,11 +107,9 @@ function meta_print_existing()
 		var name = file["SourceFile"].substr(2);
 		line("> "+name+":");
 		
-		for(var j=0;j<cfg.required.file.length;j++)
-			info(cfg.required.file[j], file);
-		
-		for(var j=0;j<cfg.optional.file.length;j++)
-			info(cfg.optional.file[j], file);
+		for(var req in cfg.file)
+			for(var j=0;j<cfg["file"][req].length; j++)
+				info(cfg["file"][req][j], file);
 	}
 }
 

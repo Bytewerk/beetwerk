@@ -134,7 +134,9 @@ function intro_files_ready()
 			if(has_meta) valid.push(4);
 			check_answer(valid, val);
 			
-			
+			if(val == 1) tagger(function(){ /* -> beets */});
+			if(val == 2) line("todo");
+			if(val == 3) tagger(function(){ /* -> beets "use as is" */});
 		};
 		
 	});
