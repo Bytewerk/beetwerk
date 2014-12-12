@@ -17,6 +17,7 @@
 	}
 */
 var global_tagger_todo = [];
+var global_tagger_todo_total = 0;
 var global_tagger_callback = null;
 
 function tagger_todo_fill()
@@ -48,8 +49,17 @@ function tagger_todo_fill()
 	}
 	
 	global_tagger_todo = todo;
+	global_tagger_todo_total = todo.length;
 }
 
+
+function tagger_status()
+{
+	var todo  = global_tagger_todo.length;
+	var total = global_tagger_todo_total;
+	
+	return "(" + (total - todo) + "/" + total +")";
+}
 
 function tagger_next()
 {
@@ -61,13 +71,14 @@ function tagger_next()
 		return global_tagger_callback();
 	}
 	
+	
 	var tag = global_tag_alias_cfg[next.tag] || next.tag;
 	var req = next.is_required ? " (required)" : "";
 	var file = next.all_files ? ""
 		: ('for "' +temp[next.temp_id]["SourceFile"].substr(2)+'" ');
 	var def = " ["+next["default"]+"]" || "";
 	
-	line(tag+""+req+" "+file+""+def+":");
+	line(tagger_status()+" "+tag+""+req+" "+file+""+def+":");
 	
 	global_question_callback = function(input)
 	{
