@@ -124,6 +124,7 @@ function line(text, /*optional*/ color)
 		call of line()!) with the current status. Limit this to one line,
 		and remove the previous ones.
 	*/
+	if(!text) text = " ";
 	text = ""+text;
 	if(text && text.indexOf("[download]") > -1)
 	{
@@ -204,8 +205,8 @@ function ui_disable_buttons()
 
 function terminal_send(/*optional*/val)
 {
-	val = val || $("commandline").value;
-	if(!val) return; // FIXME
+	val = val || $("commandline").value || "";
+	
 	ui_disable_buttons();
 	
 	if(global_process_running)
@@ -218,7 +219,8 @@ function terminal_send(/*optional*/val)
 	}
 	else
 	{
-		line(val, "purple");
+		if(val) line(val, "purple");
+		else line("", "purple").innerHTML="<i>default</i>";
 		global_question_callback(val);
 	}
 	

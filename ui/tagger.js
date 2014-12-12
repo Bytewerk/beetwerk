@@ -67,6 +67,23 @@ function tagger_next()
 	var req = next.is_required ? "required" : "optional";
 	
 	line(next.tag+" ("+req+") "+file+""+def+":");
+	
+	global_question_callback = function(input)
+	{
+		input = input || next["default"] ||  "";
+		if(!input && next.is_required)
+			return line("This field is required, please tag it correctly.");
+		
+		for(var i=0;i<temp.length;i++)
+		{
+			if(!next.all_files && next.temp_id != i)
+				continue;
+			
+			temp[i][next.tag] = input;
+		}
+		
+		tagger_next();
+	}
 }
 
 function tagger(callback)
