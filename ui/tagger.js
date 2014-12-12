@@ -43,7 +43,7 @@ function tagger_todo_fill()
 			"temp_id":		all_files ? null : i,
 			"tag":			tag,
 			"is_required":	(req == "required"),
-			"default":		temp[i][tag]
+			"default":		(temp[i][tag] || "")
 		});
 	}
 	
@@ -61,12 +61,13 @@ function tagger_next()
 		return global_tagger_callback();
 	}
 	
+	var tag = global_tag_alias_cfg[next.tag] || next.tag;
+	var req = next.is_required ? " (required)" : "";
 	var file = next.all_files ? ""
 		: ('for "' +temp[next.temp_id]["SourceFile"].substr(2)+'" ');
 	var def = " ["+next["default"]+"]" || "";
-	var req = next.is_required ? "required" : "optional";
 	
-	line(next.tag+" ("+req+") "+file+""+def+":");
+	line(tag+""+req+" "+file+""+def+":");
 	
 	global_question_callback = function(input)
 	{

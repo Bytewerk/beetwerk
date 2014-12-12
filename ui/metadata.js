@@ -21,6 +21,11 @@ var global_tags_cfg =
 	}
 };
 
+var global_tag_alias_cfg =
+{
+	"Track" : "Track No. (DON'T CONFUSE WITH TITLE)",
+}
+
 
 function meta_longest_tag()
 {
