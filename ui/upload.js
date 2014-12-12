@@ -120,18 +120,17 @@ function upload_import()
 
 function upload_start()
 {
+	ui_disable_buttons();
+
 	var files = $("file").files;
 	var total_size = 0;
-	
-	$("dropsome").className="fade2gray";
-	
+		
 	for(var i=0;i<files.length;i++)
 		total_size+= files[i].size;
 	
 	var c = files.length;
 	line("Uploading "+c+" file" + (c==1?"":"s")
-		+ " ("+Math.floor(total_size/1024/1024*10)/10+" MiB)...",
-		"rgb(000,255,000)");
+		+ " ("+Math.floor(total_size/1024/1024*10)/10+" MiB):");
 	
 	$("file").style.display="none";
 	window.focus();
@@ -140,6 +139,7 @@ function upload_start()
 	{
 		if(global_upload_done) return;
 		global_upload_done = true;
+		line("Upload finished!");
 		global_upload_callback();
 	});
 }

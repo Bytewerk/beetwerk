@@ -117,10 +117,15 @@ function intro_files_ready()
 		line("\tFull length DJ-sets in one file, very rare tracks, music you made");
 		line("\tyourself and remixes that your cat made go here!");
 		line("\n");
-		if(has_meta) line("4. Just import");
-		line("\tOnly use this option, if you are one hundred percent sure that");
-		line("\teverything was tagged right, possibly because you have produced");
-		line("\tthe music yourself.");
+		
+		if(has_meta)
+		{
+			line("4. Just import");
+			line("\tOnly use this option, if you are one hundred percent sure that");
+			line("\teverything was tagged right, possibly because you have produced");
+			line("\tthe music yourself.");
+			line("\n");
+		}
 		
 		global_question_callback = function(val)
 		{
@@ -139,9 +144,9 @@ function intro_upload_start(callback)
 {
 	global_upload_callback = callback;
 	
+	line("").innerHTML="<span class='inline_button'><i>Drag a full album/track here or click the terminal for the dialog!</i></span>";
+	
 	$("file").style.display="block";
-	line("").innerHTML="<h2 id='dropsome'>DRAG FILE(S) HERE!</h2>";
-	line("(or click to open the upload dialog)");
 }
 
 
