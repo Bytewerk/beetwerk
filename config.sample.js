@@ -10,6 +10,7 @@ exports.tempdir = "/tempdir/on/same/partition/as/music/collection";
 exports.binary = "beet";
 
 
+// Meta tag keys, as in exiftool and ffmpeg (lowercase)
 exports.meta =
 {
 	album:
