@@ -158,20 +158,15 @@ exports.metawrite = function(config, req, res, args)
 	var dir = sid_folder(config,req,res,args);
 	var tags = JSON.parse(args.tags);
 	
-	// TODO: verify that source file is in the folder
-	// (maybe iterate over files in folder instead?)
-	// this needs to be done to avoid directory transversal.
-	// it appears that the main server may also be vulnerable against
-	// this.
-	
 	// exiftool can only write to m4a files. Well, shit...
 	// Use ffmpeg instead! write to all files at the same time.
 	// 'todo' holds the still-open ffmpeg instances.
+	// NOTE: path.basename protects against directory transversal attacks
 	var todo = tags.length;
 	for(var i=0;i<tags.length;i++)
 	{	
 		var file = tags[i];
-		var name = file["SourceFile"];
+		var name = path.basename(file["SourceFile"]);
 		var cmd  = ["-y", "-i", name];
 		
 		for(var tag in file)

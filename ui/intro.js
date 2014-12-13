@@ -101,7 +101,7 @@ function intro_files_ready()
 		else line("All files in the music library must be tagged. Choose a method:");
 		line("\n");
 		
-		line("1. Manual tagging");
+		line("1. Tag manually");
 		line("\tYou'll be able to type in all tags manually (existing tags will");
 		line("\tbe suggested as default, so you just need to press the enter key).");
 		line("\tWhen you're done, you'll go back to this screen and be able to");

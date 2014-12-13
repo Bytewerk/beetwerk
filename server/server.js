@@ -45,9 +45,9 @@ exports.run = function(config)
 	http.createServer(function(req, response)
 	{
 		var args = url.parse(req.url, true).query;
+		var uri = url.parse(req.url).pathname;
 		
 		// api calls
-		var uri = url.parse(req.url).pathname;
 		var cmd = uri.substr(5);
 		if(uri.indexOf("/api/") == 0 && api[cmd])
 		{
@@ -55,8 +55,8 @@ exports.run = function(config)
 			return api[cmd](config, req, response, args);
 		}
 		
-		// normal files
-		var filename = path.join(process.cwd(),'ui',uri);
+		// normal files (path.basename() to avoid directory transversal)
+		var filename = path.join(process.cwd(),'ui',path.basename(uri));
 		fs.exists(filename, function(exists)
 		{
 			if(!exists)
@@ -65,7 +65,6 @@ exports.run = function(config)
 				response.write("You r doing it rong!");
 				return response.end();
 			}
-
 			if(fs.statSync(filename).isDirectory()) filename += '/index.html';
 			static_file(response,filename);
 		});
