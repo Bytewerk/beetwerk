@@ -35,6 +35,16 @@ function sid_folder(config,req,res,args)
 	return dir;
 }
 
+function is_tag_in_config(metacfg, tag)
+{
+	for(var where in metacfg)
+		for(var req in metacfg[where])
+			for(var i=0;i<metacfg[where][req].length; i++)
+				if(tag == metacfg[where][req][i])
+					return true;
+	return false;
+}
+
 
 /*
 	--------------------------------------------------------------------
@@ -148,25 +158,27 @@ exports.metawrite = function(config, req, res, args)
 	var dir = sid_folder(config,req,res,args);
 	var tags = JSON.parse(args.tags);
 	
-	
-	// TODO: verify tags
 	// TODO: verify that source file is in the folder
-	// (maybe iterate over files in folder instead)
+	// (maybe iterate over files in folder instead?)
+	// this needs to be done to avoid directory transversal.
+	// it appears that the main server may also be vulnerable against
+	// this.
 	
-	// write to all files at the same time. todo
-	// holds the still-open ffmpeg instances.
-	var todo = 0;
+	// exiftool can only write to m4a files. Well, shit...
+	// Use ffmpeg instead! write to all files at the same time.
+	// 'todo' holds the still-open ffmpeg instances.
+	var todo = tags.length;
 	for(var i=0;i<tags.length;i++)
-	{
-		todo++;
-		
+	{	
 		var file = tags[i];
 		var name = file["SourceFile"];
 		var cmd  = ["-y", "-i", name];
 		
 		for(var tag in file)
 		{
-			if(tag == "SourceFile" || tag == "MIMEType") continue;
+			if(!is_tag_in_config(config.meta, tag))
+				continue;
+			
 			cmd.push("-metadata", tag.toLowerCase()+"="+file[tag]);
 		}
 		cmd.push(name); // output file
@@ -178,20 +190,6 @@ exports.metawrite = function(config, req, res, args)
 			if(!todo) res.end("true");
 		});
 	}
-	
-	
-	/* 
-	// exiftool can only write to m4a files. Well... shit.
-	var tempfile = dir+"/new_tags.json";
-	fs.writeFileSync(tempfile, tags);
-	
-	cp.execFile("exiftool", ["-j=new_tags.json", "."],{cwd:dir},
-	function(error,stdout,stderr)
-	{
-		fs.unlinkSync(tempfile);
-		res.end(JSON.stringify(stdout));
-	});
-	*/
 }
 
 
