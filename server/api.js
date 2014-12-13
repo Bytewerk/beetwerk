@@ -151,10 +151,11 @@ exports.metawrite = function(config, req, res, args)
 	var tempfile = dir+"/new_tags.json";
 	fs.writeFileSync(tempfile, tags);
 	
+	// FIXME: this only works for m4a, but not for mp3, flac, ogg!
 	cp.execFile("exiftool", ["-j=new_tags.json", "."],{cwd:dir},
 	function(error,stdout,stderr)
 	{
-		// fs.unlinkSync(tempfile);
+		fs.unlinkSync(tempfile);
 		res.end(JSON.stringify(stdout));
 	});
 	

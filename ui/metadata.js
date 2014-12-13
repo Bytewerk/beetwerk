@@ -101,7 +101,7 @@ function meta_print_existing()
 		file = file || temp[0];
 		
 		line("  "+meta_tag_stretch(tag, long)
-			+": "+file[tag]);
+			+": "+(file[tag]||""));
 	};
 	
 	// album data

@@ -91,12 +91,16 @@ function intro_files_ready()
 		}
 		
 		
-		// How should we tag this?
 		line("\n");
-		if(has_meta) line("How do you want to modify the tags listed above?");
-		else line("How do you want to tag this?");
+		line("Choose your tagging method. After tagging, you'll come back to this screen");
+		line("and be able to choose another tool, if you want to.");
 		line("\n");
 		
+		line("1. Semi-automatically with beets (recommended)");
+		line("2. Manually");
+		if(has_meta) line("3. Looks fine, I'm done with tagging");
+		
+		/*
 		line("1. First manually, then via beets");
 		line("\tYou'll be able to type in all tags manually (existing tags will");
 		line("\tbe suggested as default, so you just need to press the enter key).");
@@ -117,7 +121,6 @@ function intro_files_ready()
 		line("\tFull length DJ-sets in one file, very rare tracks, music you made");
 		line("\tyourself and remixes that your cat made go here!");
 		line("\n");
-		
 		if(has_meta)
 		{
 			line("4. Just import");
@@ -126,17 +129,18 @@ function intro_files_ready()
 			line("\tthe music yourself.");
 			line("\n");
 		}
+		*/
 		
 		global_question_callback = function(val)
 		{
 			// verify if the answer is right
-			var valid = [1,2,3];
-			if(has_meta) valid.push(4);
+			var valid = [1,2];
+			if(has_meta) valid.push(3);
 			check_answer(valid, val);
 			
-			if(val == 1) tagger(function(){ /* -> beets */});
-			if(val == 2) line("todo");
-			if(val == 3) tagger(function(){ /* -> beets "use as is" */});
+			if(val == 1) line("todo"); // beet tagging
+			if(val == 2) tagger(function(){ /* -> beets */});
+			if(val == 3) line("todo"); // beet import
 		};
 		
 	});

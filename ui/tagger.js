@@ -89,7 +89,7 @@ function tagger_next()
 	
 	global_question_callback = function(input)
 	{
-		input = input || next["default"] ||  "";
+		input = input || next["default"] || "";
 		if(!input && next.is_required)
 			return line("This field is required, please tag it correctly.");
 		
