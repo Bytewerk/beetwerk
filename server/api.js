@@ -153,6 +153,20 @@ exports.metaread = function(config, req, res, args)
 	});
 }
 
+/*
+	exiftool:
+		M4A : Works (TODO: reimplement, only for m4a!)
+	ffmpeg:
+		MP3 : Works!
+		FLAC: Works!
+		OGG : Fails with: Queue input is backward in time
+		M4A : Claims the plugin is experimental and converts the track to 128 kbit/s
+	vorbiscomment:
+		OGG : Works
+	
+	TODO:
+		WMA
+*/
 exports.metawrite = function(config, req, res, args)
 {
 	var dir = sid_folder(config,req,res,args);
@@ -167,22 +181,61 @@ exports.metawrite = function(config, req, res, args)
 	{	
 		var file = tags[i];
 		var name = path.basename(file["SourceFile"]);
-		var cmd  = ["-y", "-i", name];
+		var mime = file["MIMEType"];
+		var binary = "";
+		var parameters = [];
+		var temp_out = null; // some taggers don't allow to change tags in place
 		
-		for(var tag in file)
+		
+		switch(mime)
 		{
-			if(!is_tag_in_config(config.meta, tag))
-				continue;
-			
-			cmd.push("-metadata", tag.toLowerCase()+"="+file[tag]);
+			case "video/mp4":
+				console.log("STUB: exiftool for m4a");
+				// exiftool!
+				break;
+				
+			case "audio/x-ogg":
+				binary = "vorbiscomment"
+				parameters = ["-q", "-w" ];
+				temp_out = "_"+name+".temp";
+				for(var tag in file)
+					if(is_tag_in_config(config.meta, tag))
+						parameters.push("-t "+tag.toUpperCase()+"="+file[tag])
+				parameters.push(name, temp_out);
+				break;
+				
+			default: // FLAC, MP3;
+				if(["audio/mpeg", "audio/flac"].indexOf(mime) == -1)
+					console.log("Warning: don't really know how to handle mime type "
+						+mime+" (in file "+name+"). Trying ffmpeg...");
+				
+				binary = "ffmpeg";
+				parameters  = ["-y", "-i", name];
+				
+				for(var tag in file)
+					if(is_tag_in_config(config.meta, tag))
+						parameters.push("-metadata", tag.toLowerCase()+"="+file[tag]);
+				
+				parameters.push(name); // output file
+				break;
 		}
-		cmd.push(name); // output file
 		
-		cp.execFile("ffmpeg", cmd, {cwd:dir},
+		// debug info
+		// console.log("tagging file " + name + ", MIME: "+mime);
+		// console.log("\t"+binary+" "+parameters.join(" "));
+		
+		cp.execFile(binary, parameters, {cwd:dir},
 		function(error, stdout, stderr)
 		{
-			todo--;
-			if(!todo) res.end("true");
+			var done = function(error,stdout,stderr)
+			{
+				todo--;
+				if(!todo) res.end("true");
+			};
+			
+			// if there's a temp output file, move it over the original
+			if(!temp_out) return done();
+			cp.execFile("mv", [temp_out, name], {cwd:dir}, done);
 		});
 	}
 }

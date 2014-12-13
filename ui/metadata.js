@@ -40,7 +40,7 @@ function meta_read(callback)
 		var temp = [];
 		for(var i=0;i<answer.length;i++)
 			if(answer[i]["MIMEType"].indexOf("audio") > -1
-				|| answer[i]["MIMEType"] == "video/mp4") // m4a
+				|| answer[i]["MIMEType"].indexOf("video") > -1)
 				temp.push(answer[i]);
 		
 		// sort by filename
