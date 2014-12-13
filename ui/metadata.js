@@ -3,24 +3,9 @@
 // Contains all tags of files in the temp folder,
 // as spit out by exiftool.
 var global_tags_tempfolder = null;
+var global_tags_cfg = null; // same as config.meta
 
-// TODO: move this to the config file, make it accessible by
-// the server!
-
-var global_tags_cfg =
-{
-	album:
-	{
-		required: ["Artist", "Genre"],
-		optional: ["Album", "Year"]
-	},
-	file:
-	{
-		required: ["Title"],
-		optional: ["Track"]
-	}
-};
-
+// TODO: move this to the config?
 var global_tag_alias_cfg =
 {
 	"Track" : "Track No. (DON'T CONFUSE WITH TITLE)",
@@ -69,6 +54,7 @@ function meta_read(callback)
 
 function meta_write(callback)
 {
+	global_question_callback = function(){line("Please be patient.");}
 	xhr("metawrite?tags=" + encodeURIComponent(JSON.stringify(global_tags_tempfolder)), callback);
 }
 

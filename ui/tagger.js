@@ -1,4 +1,9 @@
 "use strict";
+
+// FIXME: Year gets lost when choosing default!
+
+
+
 /*
 	global_tagger_todo[i] =
 	{
@@ -71,7 +76,6 @@ function tagger_next()
 		meta_write(function(answer)
 		{
 			line("done.");
-			line(answer);
 			intro_files_ready();
 		});
 		

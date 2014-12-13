@@ -8,3 +8,18 @@ exports.tempdir = "/tempdir/on/same/partition/as/music/collection";
 // something like this instead:
 // exports.binary = "/home/beets/.local/bin/beet";
 exports.binary = "beet";
+
+
+exports.meta =
+{
+	album:
+	{
+		required: ["Artist", "Genre"],
+		optional: ["Album", "Year"]
+	},
+	file:
+	{
+		required: ["Title"],
+		optional: ["Track"]
+	}
+};

@@ -175,15 +175,9 @@ exports.metawrite = function(config, req, res, args)
 		function(error, stdout, stderr)
 		{
 			todo--;
-			if(!todo) res.end(JSON.stringify(true));
+			if(!todo) res.end("true");
 		});
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	/* 
@@ -198,5 +192,11 @@ exports.metawrite = function(config, req, res, args)
 		res.end(JSON.stringify(stdout));
 	});
 	*/
+}
+
+
+exports.metacfg = function(config, req, res, args)
+{
+	res.end(JSON.stringify(config.meta));
 }
 

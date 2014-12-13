@@ -12,6 +12,11 @@ function intro()
 {
 	$("terminal").style.display="block";
 	
+	xhr("metacfg",function(answer)
+	{
+		global_tags_cfg = answer;
+	});
+	
 	xhr("df",function(free)
 	{
 		scrollbar_init();

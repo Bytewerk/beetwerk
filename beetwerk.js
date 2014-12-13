@@ -4,6 +4,7 @@
 	TODO: check for required programs:
 		exiftool
 		youtube-dl (or don't provide the option!)
+		ffmpeg
 */
 
 
@@ -41,10 +42,19 @@ if(config && config.tempdir == require("./config.sample").tempdir)
 
 
 // Check if it has been loaded properly
-if(!config || !config.port || !config.tempdir || !config.binary)
+try
 {
-	console.log("Your config is broken. THREE VARIABLES, DUDE!"
-		+" FIX IT AND TRY AGAIN!");
+	config.port;
+	config.tempdir;
+	config.binary;
+	config.meta.album.required;
+	config.meta.album.optional;
+	config.meta.file.required;
+	config.meta.file.optional;
+}
+catch(e)
+{
+	console.log("You fucked up the config, dude. Fix it and try again.");
 	console.log("\t"+config_path);
 	process.exit(1);
 }
