@@ -111,7 +111,7 @@ function intro_files_ready()
 		line("\tif you have some exotic tunes like music you made yourself, rare");
 		line("\tremixes or full-length DJ sets in one file.");
 		line("\n");
-		line("2. Semi-automatically tag and import with beets");
+		line("2. Import with semi-automatic tagging");
 		line("\tUse this if it is already tagged pretty well and the music isn't");
 		line("\ttoo exotic. beets will either automatically detect the album and");
 		line("\tmake sure that all tags are perfect, or present you with a list");
@@ -121,7 +121,7 @@ function intro_files_ready()
 		
 		if(has_meta)
 		{
-			line("3. The tags are perfect, import without further modification");
+			line("3. Just import (the tags are perfect!)");
 			line("\tOnly use this option, if you are one hundred percent sure that");
 			line("\teverything was tagged right, possibly because you have produced");
 			line("\tthe music yourself.");
@@ -135,9 +135,20 @@ function intro_files_ready()
 			if(has_meta) valid.push(3);
 			check_answer(valid, val);
 			
-			if(val == 1) tagger(function(){ /* -> beets */});
-			if(val == 2) line("todo"); // beet tagging
-			if(val == 3) line("todo"); // beet import
+			if(val == 1) return tagger();
+			if(val == 2 || val == 3) xhr("import?asis="+(val == 3), function()
+			{
+				global_exec_callback = function(ret)
+				{
+					if(!ret) return line("Import was successful \\o/").innerHTML
+						+= " (<a href='/'>refresh</a> to upload something else)";
+					
+					line("The import has failed :(");
+					setTimeout(intro_files_ready,0); // clear up the stack
+				}
+				global_process_running = true;
+				setTimeout(terminal_poll, 500);
+			});
 		};
 		
 	});

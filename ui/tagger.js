@@ -23,7 +23,6 @@
 */
 var global_tagger_todo = [];
 var global_tagger_todo_total = 0;
-var global_tagger_callback = null;
 
 function tagger_todo_fill()
 {
@@ -109,9 +108,8 @@ function tagger_next()
 	}
 }
 
-function tagger(callback)
+function tagger()
 {
-	global_tagger_callback = callback;
 	tagger_todo_fill();
 	line("\n");
 	line("Fill out the tagging information by putting new values into the box below.");

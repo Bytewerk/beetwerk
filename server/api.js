@@ -111,8 +111,15 @@ exports.import = function(config, req, res, args)
 	var dir = sid_folder(config,req,res,args);
 	if(!dir) return;
 	
+	// TODO: when there's only one file, specify the track mode
+	
 	res.end(JSON.stringify(pipe.start(dir, config.binary,
-		["import","--nocopy",dir])));
+	[
+		"import",
+		args.asis ? "-A" : "",
+		"--nocopy",
+		dir
+	])));
 }
 
 // poll for new output of "beet import"

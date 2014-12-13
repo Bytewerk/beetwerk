@@ -109,15 +109,6 @@ function upload_all(callback, index)
 	});
 }
 
-function upload_import()
-{
-	xhr("import", function()
-	{
-		global_process_running = true;
-		setTimeout(terminal_poll, 500);
-	});
-}
-
 function upload_start()
 {
 	ui_disable_buttons();
