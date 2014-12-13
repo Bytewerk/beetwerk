@@ -146,18 +146,57 @@ exports.metaread = function(config, req, res, args)
 exports.metawrite = function(config, req, res, args)
 {
 	var dir = sid_folder(config,req,res,args);
-	var tags = args.tags;
+	var tags = JSON.parse(args.tags);
 	
+	
+	// TODO: verify tags
+	// TODO: verify that source file is in the folder
+	// (maybe iterate over files in folder instead)
+	
+	// write to all files at the same time. todo
+	// holds the still-open ffmpeg instances.
+	var todo = 0;
+	for(var i=0;i<tags.length;i++)
+	{
+		todo++;
+		
+		var file = tags[i];
+		var name = file["SourceFile"];
+		var cmd  = ["-y", "-i", name];
+		
+		for(var tag in file)
+		{
+			if(tag == "SourceFile" || tag == "MIMEType") continue;
+			cmd.push("-metadata", tag.toLowerCase()+"="+file[tag]);
+		}
+		cmd.push(name); // output file
+		
+		cp.execFile("ffmpeg", cmd, {cwd:dir},
+		function(error, stdout, stderr)
+		{
+			todo--;
+			if(!todo) res.end(JSON.stringify(true));
+		});
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	/* 
+	// exiftool can only write to m4a files. Well... shit.
 	var tempfile = dir+"/new_tags.json";
 	fs.writeFileSync(tempfile, tags);
 	
-	// FIXME: this only works for m4a, but not for mp3, flac, ogg!
 	cp.execFile("exiftool", ["-j=new_tags.json", "."],{cwd:dir},
 	function(error,stdout,stderr)
 	{
 		fs.unlinkSync(tempfile);
 		res.end(JSON.stringify(stdout));
 	});
-	
+	*/
 }
 
