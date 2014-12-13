@@ -190,8 +190,12 @@ exports.metawrite = function(config, req, res, args)
 		switch(mime)
 		{
 			case "video/mp4":
-				console.log("STUB: exiftool for m4a");
-				// exiftool!
+				binary = "exiftool";
+				parameters = [];
+				for(var tag in file)
+					if(is_tag_in_config(config.meta, tag))
+						parameters.push("-"+tag+"="+file[tag])
+				parameters.push(name);
 				break;
 				
 			case "audio/x-ogg":
