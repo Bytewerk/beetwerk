@@ -92,44 +92,36 @@ function intro_files_ready()
 		
 		
 		line("\n");
-		line("Choose your tagging method. After tagging, you'll come back to this screen");
-		line("and be able to choose another tool, if you want to.");
+		if(has_meta) line("What do you want to do now?");
+		else line("All files in the music library must be tagged. Choose a method:");
 		line("\n");
 		
-		line("1. Semi-automatically with beets (recommended)");
-		line("2. Manually");
-		if(has_meta) line("3. Looks fine, I'm done with tagging");
-		
-		/*
-		line("1. First manually, then via beets");
+		line("1. Manual tagging");
 		line("\tYou'll be able to type in all tags manually (existing tags will");
 		line("\tbe suggested as default, so you just need to press the enter key).");
-		line("\tAfter that, the automagic beets tagger will try its best to find");
-		line("\ttags in a music database such as musicbrainz or discogs.");
+		line("\tWhen you're done, you'll go back to this screen and be able to");
+		line("\tchoose how to import the files (option (2) or (3)).");
 		line("\n");
-		line("\tChoose this, if you see that there are wrong or missing tags");
-		line("\t(manually add/edit them) and your music isn't too exotic (it");
-		line("\tis owned by a record label or is from Jamendo).");
+		line("\tChoose this, if you see that there are wrong or missing tags, or");
+		line("\tif you have some exotic tunes like music you made yourself, rare");
+		line("\tremixes or full-length DJ sets in one file.");
 		line("\n");
-		line("2. Via beets only");
+		line("2. Semi-automatically tag and import with beets");
 		line("\tUse this if it is already tagged pretty well and the music isn't");
 		line("\ttoo exotic. beets will either automatically detect the album and");
 		line("\tmake sure that all tags are perfect, or present you with a list");
 		line("\tof album candidates that you can choose from.");
 		line("\n");
-		line("3. Manually only");
-		line("\tFull length DJ-sets in one file, very rare tracks, music you made");
-		line("\tyourself and remixes that your cat made go here!");
-		line("\n");
+		
+		
 		if(has_meta)
 		{
-			line("4. Just import");
+			line("3. The tags are perfect, import without further modification");
 			line("\tOnly use this option, if you are one hundred percent sure that");
 			line("\teverything was tagged right, possibly because you have produced");
 			line("\tthe music yourself.");
 			line("\n");
 		}
-		*/
 		
 		global_question_callback = function(val)
 		{
@@ -138,8 +130,8 @@ function intro_files_ready()
 			if(has_meta) valid.push(3);
 			check_answer(valid, val);
 			
-			if(val == 1) line("todo"); // beet tagging
-			if(val == 2) tagger(function(){ /* -> beets */});
+			if(val == 1) tagger(function(){ /* -> beets */});
+			if(val == 2) line("todo"); // beet tagging
 			if(val == 3) line("todo"); // beet import
 		};
 		
