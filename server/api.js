@@ -155,32 +155,26 @@ exports.metaread = function(config, req, res, args)
 
 /*
 	exiftool:
-		M4A : Works (TODO: reimplement, only for m4a!)
+		M4A : Works
 	ffmpeg:
-		MP3 : Works!
-		FLAC: Works!
+		MP3 : Works
+		FLAC: Works
 		OGG : Fails with: Queue input is backward in time
 		M4A : Claims the plugin is experimental and converts the track to 128 kbit/s
+		WMA : Untested and hopefully dead anyway
 	vorbiscomment:
 		OGG : Works
-	
-	TODO:
-		WMA
 */
 exports.metawrite = function(config, req, res, args)
 {
 	var dir = sid_folder(config,req,res,args);
 	var tags = JSON.parse(args.tags);
-	
-	// exiftool can only write to m4a files. Well, shit...
-	// Use ffmpeg instead! write to all files at the same time.
-	// 'todo' holds the still-open ffmpeg instances.
-	// NOTE: path.basename protects against directory transversal attacks
 	var todo = tags.length;
+	
 	for(var i=0;i<tags.length;i++)
 	{	
 		var file = tags[i];
-		var name = path.basename(file["SourceFile"]);
+		var name = path.basename(file["SourceFile"]); // no directory transversal
 		var mime = file["MIMEType"];
 		var binary = "";
 		var parameters = [];
@@ -192,6 +186,7 @@ exports.metawrite = function(config, req, res, args)
 			case "video/mp4":
 				binary = "exiftool";
 				parameters = [];
+				
 				for(var tag in file)
 					if(is_tag_in_config(config.meta, tag))
 						parameters.push("-"+tag+"="+file[tag])
@@ -202,31 +197,27 @@ exports.metawrite = function(config, req, res, args)
 				binary = "vorbiscomment"
 				parameters = ["-q", "-w" ];
 				temp_out = "_"+name+".temp";
+				
 				for(var tag in file)
 					if(is_tag_in_config(config.meta, tag))
 						parameters.push("-t "+tag.toUpperCase()+"="+file[tag])
 				parameters.push(name, temp_out);
 				break;
 				
-			default: // FLAC, MP3;
-				if(["audio/mpeg", "audio/flac"].indexOf(mime) == -1)
-					console.log("Warning: don't really know how to handle mime type "
-						+mime+" (in file "+name+"). Trying ffmpeg...");
-				
+			default:
 				binary = "ffmpeg";
 				parameters  = ["-y", "-i", name];
+				
+				if(["audio/mpeg", "audio/flac"].indexOf(mime) == -1)
+					console.log("Warning: don't really know how to tag mime type "
+						+mime+" (file: "+name+"). Trying ffmpeg...");
 				
 				for(var tag in file)
 					if(is_tag_in_config(config.meta, tag))
 						parameters.push("-metadata", tag.toLowerCase()+"="+file[tag]);
-				
-				parameters.push(name); // output file
+				parameters.push(name);
 				break;
 		}
-		
-		// debug info
-		// console.log("tagging file " + name + ", MIME: "+mime);
-		// console.log("\t"+binary+" "+parameters.join(" "));
 		
 		cp.execFile(binary, parameters, {cwd:dir},
 		function(error, stdout, stderr)
