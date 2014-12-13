@@ -67,8 +67,15 @@ function tagger_next()
 	var next = global_tagger_todo.shift();
 	if(!next)
 	{
-		line("looks like you're done with tagging (STUB)");
-		return global_tagger_callback();
+		line("Writing all tags...");
+		meta_write(function(answer)
+		{
+			line("done.");
+			line(answer);
+			intro_files_ready();
+		});
+		
+		return;
 	}
 	
 	

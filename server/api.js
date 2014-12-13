@@ -143,4 +143,20 @@ exports.metaread = function(config, req, res, args)
 	});
 }
 
+exports.metawrite = function(config, req, res, args)
+{
+	var dir = sid_folder(config,req,res,args);
+	var tags = args.tags;
+	
+	var tempfile = dir+"/new_tags.json";
+	fs.writeFileSync(tempfile, tags);
+	
+	cp.execFile("exiftool", ["-j=new_tags.json", "."],{cwd:dir},
+	function(error,stdout,stderr)
+	{
+		// fs.unlinkSync(tempfile);
+		res.end(JSON.stringify(stdout));
+	});
+	
+}
 

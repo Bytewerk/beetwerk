@@ -85,7 +85,7 @@ function intro_files_ready()
 		if(has_meta)
 		{
 			line("\n");
-			line("Existing metadata:");
+			line("Current metadata:");
 			line("\n");
 			meta_print_existing();
 		}

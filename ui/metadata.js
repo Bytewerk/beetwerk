@@ -11,13 +11,13 @@ var global_tags_cfg =
 {
 	album:
 	{
-		optional: ["Album", "Year"],
-		required: ["Artist", "Genre"]
+		required: ["Artist", "Genre"],
+		optional: ["Album", "Year"]
 	},
 	file:
 	{
-		optional: ["Track"],
-		required: ["Title"]
+		required: ["Title"],
+		optional: ["Track"]
 	}
 };
 
@@ -65,6 +65,11 @@ function meta_read(callback)
 		});
 		callback();
 	});
+}
+
+function meta_write(callback)
+{
+	xhr("metawrite?tags=" + encodeURIComponent(JSON.stringify(global_tags_tempfolder)), callback);
 }
 
 // make sure that tags.length>0 before calling this!
