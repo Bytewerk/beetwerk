@@ -136,7 +136,8 @@ function intro_files_ready()
 			check_answer(valid, val);
 			
 			if(val == 1) return tagger();
-			if(val == 2 || val == 3) xhr("import?asis="+(val == 3), function()
+			if(val == 2 || val == 3)
+				xhr("import?asis="+(val == 3)+"&single="+(temp.length==1), function()
 			{
 				global_exec_callback = function(ret)
 				{

@@ -117,6 +117,7 @@ exports.import = function(config, req, res, args)
 	[
 		"import",
 		args.asis ? "-A" : "",
+		args.single ? "-s" : "",
 		"--nocopy",
 		dir
 	])));
