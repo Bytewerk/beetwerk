@@ -82,6 +82,8 @@ function intro_files_ready()
 {
 	meta_read(function()
 	{
+		var green = "[32;01m";
+		var red = "[31;01m";
 		var temp = global_tags_tempfolder;
 		if(!temp.length) return line("ERROR: there are no music files in the temp folder!");
 		
@@ -109,19 +111,23 @@ function intro_files_ready()
 		line("\n");
 		line("\tChoose this, if you see that there are wrong or missing tags, or");
 		line("\tif you have some exotic tunes like music you made yourself, rare");
-		line("\tremixes or full-length DJ sets in one file.");
+		line("\tremixes or full-length DJ sets in one file. Duplicates in the");
+		line("\tlibrary will get reported to you.");
 		line("\n");
-		line("2. Import with semi-automatic tagging");
-		line("\tUse this if it is already tagged pretty well and the music isn't");
-		line("\ttoo exotic. beets will either automatically detect the album and");
-		line("\tmake sure that all tags are perfect, or present you with a list");
-		line("\tof album candidates that you can choose from.");
+		line("2. Import with semi-automatic tagging "+green+"(recommended)");
+		line("\tUse this if the music isn't too exotic (it is on a record label or");
+		line("\tfrom Jamendo). beets will either automatically detect the album and");
+		line("\tmake sure that all tags are perfect, or present you with a list of");
+		line("\talbum candidates that you can choose from.");
+		line("\n");
+		line("\tIf you know that some tags are wrong (they are listed above), try");
+		line("\tfixing them with option (1) first.");
 		line("\n");
 		
 		
 		if(has_meta)
 		{
-			line("3. Just import (the tags are perfect!)");
+			line("3. Just import "+red+"(avoid if possible)");
 			line("\tOnly use this option, if you are one hundred percent sure that");
 			line("\teverything was tagged right, possibly because you have produced");
 			line("\tthe music yourself.");
@@ -139,6 +145,8 @@ function intro_files_ready()
 			if(val == 2 || val == 3)
 				xhr("import?asis="+1*(val == 3)+"&single="+1*(temp.length==1), function()
 			{
+				line("Import has been started. Please be patient, this will take some time.");
+				
 				global_exec_callback = function(ret)
 				{
 					if(!ret) return line("Import was successful \\o/").innerHTML
