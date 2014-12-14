@@ -147,14 +147,19 @@ exports.ytdl = function(config, req, res, args)
 		["--restrict-filenames", "-x", "-f", "bestaudio/best", args.url], dir)));
 }
 
-// try to get the album tag of the files in the temp folder
+// get all meta tags (that are listed in the config) for the album
 exports.metaread = function(config, req, res, args)
 {
 	var dir = sid_folder(config,req,res,args);
-	
-	// todo: generate this from the new config!
-	cp.execFile("exiftool", ["-json", "-Album", "-Artist",
-		"-Track", "-Title","-Genre", "-Year", "-MIMEType","."],{cwd:dir},
+	var parameters = ["-json"];
+	var meta = config.meta;
+	for(var where in meta)
+		for(var req in meta[where])
+			for(var i=0;i<meta[where][req].length;i++)
+				parameters.push("-"+meta[where][req][i]);
+	parameters.push("-MIMETYPE", ".");
+		
+	cp.execFile("exiftool", parameters,{cwd:dir},
 	function(error,stdout,stderr)
 	{
 		res.end(stdout);

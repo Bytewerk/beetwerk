@@ -16,7 +16,7 @@ exports.meta =
 	album:
 	{
 		required: ["Artist", "Genre"],
-		optional: ["Album", "Year"]
+		optional: ["Album"]
 	},
 	file:
 	{
