@@ -128,9 +128,11 @@ function intro_files_ready()
 		if(has_meta)
 		{
 			line("3. Just import "+red+"(avoid if possible)");
-			line("\tOnly use this option, if you are one hundred percent sure that");
-			line("\teverything was tagged right, possibly because you have produced");
-			line("\tthe music yourself.");
+			line("\tIf you are sure that beets won't find anything (=> exotic music),");
+			line("\tyou may use this option to import everything without any further");
+			line("\tmodification. Please double-check that you have tagged everything");
+			line("\tright (see the metadata listing above). You can fix the tags with");
+			line("\toption (1). Duplicates will not get detected!");
 			line("\n");
 		}
 		
@@ -146,6 +148,8 @@ function intro_files_ready()
 				xhr("import?asis="+1*(val == 3)+"&single="+1*(temp.length==1), function()
 			{
 				line("Import has been started. Please be patient, this will take some time.");
+				
+				if(val == 2) $("guide").style.display = "block";
 				
 				global_exec_callback = function(ret)
 				{
