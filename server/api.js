@@ -116,8 +116,8 @@ exports.import = function(config, req, res, args)
 	res.end(JSON.stringify(pipe.start(dir, config.binary,
 	[
 		"import",
-		args.asis ? "-A" : "",
-		args.single ? "-s" : "",
+		1*args.asis ? "-A" : "",
+		1*args.single ? "-s" : "",
 		"--nocopy",
 		dir
 	])));

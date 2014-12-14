@@ -137,7 +137,7 @@ function intro_files_ready()
 			
 			if(val == 1) return tagger();
 			if(val == 2 || val == 3)
-				xhr("import?asis="+(val == 3)+"&single="+(temp.length==1), function()
+				xhr("import?asis="+1*(val == 3)+"&single="+1*(temp.length==1), function()
 			{
 				global_exec_callback = function(ret)
 				{
