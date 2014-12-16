@@ -63,16 +63,13 @@ function intro_source_selected(val)
 		line("").innerHTML="Throw it in the box below and I'll have a look.";
 		$("commandline").focus();
 		global_question_callback = function(url)
-		{
-			global_exec_callback = intro_files_ready;
-			
+		{	
 			line("Firing up youtube-dl...");
 			xhr("ytdl?url="+encodeURIComponent(url), function(answer)
 			{
 				if(!answer) return line("").innerHTML= "ERROR: Something has gone wrong, please"
 					+ "<a href='https://github.com/Bytewerk/beetwerk/issues'>report this.</a>";
-				global_process_running = true;
-				setTimeout(terminal_poll, 500);
+				pipe_client_poll_start(intro_files_ready);
 			});
 		}
 	}
@@ -151,16 +148,14 @@ function intro_files_ready()
 				
 				if(val == 2) $("guide").style.display = "block";
 				
-				global_exec_callback = function(ret)
+				pipe_client_poll_start(function(ret)
 				{
 					if(!ret) return line("Import was successful \\o/").innerHTML
 						+= " (<a href='/'>refresh</a> to upload something else)";
 					
 					line("The import has failed :(");
 					setTimeout(intro_files_ready,0); // clear up the stack
-				}
-				global_process_running = true;
-				setTimeout(terminal_poll, 500);
+				});
 			});
 		};
 		

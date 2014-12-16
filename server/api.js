@@ -109,18 +109,18 @@ exports.upload = function(config, req, res, args)
 exports.import = function(config, req, res, args)
 {
 	var dir = sid_folder(config,req,res,args);
-	if(!dir) return;
+	if(!dir) return console.log("error: sid_folder doesn't exist!");
 	
-	// TODO: when there's only one file, specify the track mode
-	
-	res.end(JSON.stringify(pipe.start(dir, config.binary,
-	[
+	var parameters = [
 		"import",
 		1*args.asis ? "-A" : "",
 		1*args.single ? "-s" : "",
 		"--nocopy",
 		dir
-	])));
+	];
+	
+	res.end(JSON.stringify(pipe.start(dir, config.binary,parameters)));
+	console.log(config.binary+" "+parameters.join(" "));
 }
 
 // poll for new output of "beet import"
