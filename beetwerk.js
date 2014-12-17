@@ -13,6 +13,7 @@ process.chdir(__dirname); // cd to this file's directory
 
 var server = require("./server/server.js");
 var other = require("./server/other.js");
+var cp = require("child_process");
 
 
 // create a default config
@@ -80,3 +81,24 @@ process.on("uncaughtException", function (e)
 
 
 server.run(config);
+
+
+// get the default beets config path and add it to the beets config
+
+cp.execFile(config.binary, ["config", "--default", "--path"], null, function(error,stdout,stderr)
+{
+	config.beet_default_cfg = stdout.split("\n")[1];
+	
+	if(!config.beet_default_cfg)
+	{
+		console.error("ERROR: Couldn't find beets default config!");
+		console.error("Please report this bug!");
+		process.exit();
+	}
+});
+
+
+
+
+
+
