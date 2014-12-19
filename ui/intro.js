@@ -111,25 +111,26 @@ function intro_files_ready()
 		line("\tremixes or full-length DJ sets in one file. Duplicates in the");
 		line("\tlibrary will get reported to you.");
 		line("\n");
-		line("2. Import with semi-automatic tagging "+green+"(recommended)");
+		line("2. Correct tags semi-automatically and import");
 		line("\tUse this if the music isn't too exotic (it is on a record label or");
 		line("\tfrom Jamendo). beets will either automatically detect the album and");
 		line("\tmake sure that all tags are perfect, or present you with a list of");
 		line("\talbum candidates that you can choose from.");
 		line("\n");
 		line("\tIf you know that some tags are wrong (they are listed above), try");
-		line("\tfixing them with option (1) first.");
+		line("\tfixing them with option (1) first! You won't be able to manually");
+		line("\ttag the files after running this command!");
 		line("\n");
 		
 		
 		if(has_meta)
 		{
-			line("3. Just import "+red+"(avoid if possible)");
+			line("3. Just import");
 			line("\tIf you are sure that beets won't find anything (=> exotic music),");
 			line("\tyou may use this option to import everything without any further");
 			line("\tmodification. Please double-check that you have tagged everything");
 			line("\tright (see the metadata listing above). You can fix the tags with");
-			line("\toption (1). Duplicates will not get detected!");
+			line("\toption (1). Duplicates will NOT get detected!");
 			line("\n");
 		}
 		

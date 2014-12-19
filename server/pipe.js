@@ -12,7 +12,7 @@ exports.start = function(id, command, args /*optional */, working_dir /*optional
 	// Start the program
 	args = args || [];
 	
-	console.log("Running: "+command+" "+args.join(" "));
+	// console.log("Running: "+command+" "+args.join(" "));
 	
 	var bin = cp.spawn(command, args,
 	{
@@ -22,7 +22,7 @@ exports.start = function(id, command, args /*optional */, working_dir /*optional
 		env: {"PYTHONUNBUFFERED": true},
 		cwd: working_dir || null
 	});
-	if(!bin) return console.log("ERROR: Running above command failed!");
+	if(!bin) return console.log("ERROR: Running command failed: "+command+" "+args.join(" "));
 	
 	// Prepare the buffer
 	buffers[id] =
@@ -49,7 +49,7 @@ exports.start = function(id, command, args /*optional */, working_dir /*optional
 	// Exit handler
 	bin.on('exit', function (code)
 	{
-		console.log("Program has quit: "+command+ " "+args.join(" "));
+		// console.log("Program has quit: "+command+ " "+args.join(" "));
 		// when the process gets killed via timeout,
 		// the exit code is already set
 		if(!buffers[id].exit_code)
