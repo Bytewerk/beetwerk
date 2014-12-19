@@ -184,31 +184,55 @@ exports.metawrite = function(config, req, res, args)
 	var temp_lib = dir + "/beets_templibrary.blob";
 	
 	// Import everything into a temporary beets database
-	cp.execFile("beet", ["-c", config.beet_default_cfg,
-		"-l", dir,
-		"-d", temp_lib, // database
+	cp.execFile(config.binary,
+	[
+		"-c", config.beet_default_cfg,
+		"-d", dir,
+		"-l", temp_lib, // database
 		"import", "-C", // don't copy
 		"-A", // don't autotag
 		dir
 	], null, function(error, stdout, stderr)
 	{
-		console.log("stdout: \n"+stdout);
-		console.log("stderr: \n"+stderr);
-		console.log("error: \n"+error);
+		// tag each file with an own beets instance
+		var tags = JSON.parse(args.tags); // TODO: catch this
+		var todo = tags.length;
 		
-		
-		// debug: just list everything
-		cp.execFile("beet", ["-c", config.beet_default_cfg,
-		"-l", dir,
-		"-d", temp_lib,
-		"list"
-		], null, function(error, stdout, stderr)
+		for(var i=0;i<tags.length;i++)
 		{
-			console.log("stdout: \n"+stdout);
-			console.log("stderr: \n"+stderr);
-			console.log("error: \n"+error);
+			var file = tags[i];
+			var name = path.basename(file["SourceFile"]); // no directory transversal
+			var parameters = [
+				"-c", config.beet_default_cfg,
+				"-d", dir,
+				"-l", temp_lib,
+				"modify",
+				"-M", // don't move files
+				"-y", // don't ask for confirmation
+				"path:"+dir+"/"+name
+			];
 			
-		});
+			for(var tag in file) if(is_tag_in_config(config.meta, tag))
+			{
+				if(tag == "Track" && file[tag].indexOf("/") > -1)
+				{
+					var pos = file[tag].indexOf("/");
+					var track = file[tag].substr(0,pos);
+					var tracktotal = file[tag].substr(pos+1);
+					parameters.push("track="+track, "tracktotal="+tracktotal);
+				}
+				else
+					parameters.push(tag.toLowerCase()+"="+file[tag]);
+			}
+			
+			cp.execFile(config.binary, parameters, null,
+				function(error, stdout, stderr)
+			{
+				todo--;
+				if(todo) return;
+				res.end("true");
+			});
+		}
 	});
 }
 
