@@ -214,7 +214,8 @@ exports.metawrite = function(config, req, res, args)
 			
 			for(var tag in file) if(is_tag_in_config(config.meta, tag))
 			{
-				if(tag == "Track" && file[tag].indexOf("/") > -1)
+				if(tag == "Track" && file[tag]
+					&& file[tag].indexOf("/") > -1)
 				{
 					var pos = file[tag].indexOf("/");
 					var track = file[tag].substr(0,pos);
