@@ -214,6 +214,10 @@ exports.metawrite = function(config, req, res, args)
 			
 			for(var tag in file) if(is_tag_in_config(config.meta, tag))
 			{
+				// make sure that we actually have a string,
+				// especially when tagging track/year numbers!
+				file[tag] = file[tag]+"";
+				
 				if(tag == "Track" && file[tag]
 					&& file[tag].indexOf("/") > -1)
 				{
