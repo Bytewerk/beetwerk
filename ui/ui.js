@@ -142,10 +142,11 @@ function line(text, /*optional*/ color)
 	// Disable youtube-dl messages that say it won't convert audio files
 	if(text.indexOf("[youtube] Post-process file ") > -1) return;
 	
-        // HACK HACK HACK disable some misleading message
-        if(text.indexOf("No files imported from ") > -1)            
+        // HACK HACK HACK disable some misleading messages
+        if(text.indexOf("No files imported from ") > -1
+        	|| text.indexOf("Unverified HTTPS request is being made") > -1)            
         {
-                console.log("skipped probably misleading text: "+text);
+                console.log("skipped probably misleading text lol: "+text);
                 return;
         }
 
