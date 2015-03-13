@@ -142,6 +142,14 @@ function line(text, /*optional*/ color)
 	// Disable youtube-dl messages that say it won't convert audio files
 	if(text.indexOf("[youtube] Post-process file ") > -1) return;
 	
+        // HACK HACK HACK disable some misleading message
+        if(text.indexOf("No files imported from ") > -1)            
+        {
+                console.log("skipped probably misleading text: "+text);
+                return;
+        }
+
+	
 	// only scroll, if the terminal is already scrolled to the bottom!
 	// FIXME: doesn't always work
 	var dont_scroll =
