@@ -92,7 +92,9 @@ cp.execFile(config.binary, ["config", "--default", "--path"], null, function(err
 	if(!config.beet_default_cfg)
 	{
 		console.error("ERROR: Couldn't find beets default config!");
-		console.error("Please report this bug!");
+		console.error("Verify that beets is installed and working and");
+		console.error("check your config.binary in the config file:");
+		console.error("\t"+config_path);
 		process.exit();
 	}
 });
